@@ -53,4 +53,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: yourdockerhubname/yourimagename:latest
+          tags: rafsis/airdcpp-web-client-darkmode:latest
