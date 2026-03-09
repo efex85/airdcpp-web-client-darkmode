@@ -49,5 +49,6 @@ RUN INDEX="/airdcpp-webclient/web-resources/index.html" \
 
 COPY .airdcpp/ /.default-config
 COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 EXPOSE 5600 5601 21248 21249
 ENTRYPOINT ["/entrypoint.sh"]
