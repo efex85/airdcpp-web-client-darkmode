@@ -1,7 +1,7 @@
 ARG distro=stable-slim
 FROM debian:${distro}
 
-ARG dl_url="https://web-builds.airdcpp.net/develop/airdcpp_latest_develop_64-bit_portable.tar.gz"
+ARG dl_url
 
 RUN installDeps=' \
         curl \
@@ -35,11 +35,8 @@ RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
 
 # Create default directories
 RUN mkdir -p /.airdcpp /Downloads /Share \
-    # Set permission on default directories
     && chmod a+rwX /.airdcpp /Downloads /Share \
-    # Create symlink to configuration directory
     && ln -sf /.airdcpp /airdcpp-webclient/config \
-    # Fix /favicon.ico 404 request
     && cd /airdcpp-webclient/web-resources \
     && ln -sf images/favicon.*.ico favicon.ico
 
