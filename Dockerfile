@@ -1,121 +1,56 @@
-name: Build AirDC++ images (develop + stable)
+ARG distro=stable-slim
+FROM debian:${distro}
 
-on:
-  schedule:
-    - cron: "0 * * * *"   # every hour
-  workflow_dispatch:
+ARG dl_url="https://web-builds.airdcpp.net/develop/airdcpp_latest_develop_64-bit_portable.tar.gz"
 
-jobs:
+RUN installDeps=' \
+        curl \
+        gnupg \
+    ' \
+    && runtimeDeps=' \
+        ca-certificates \
+        locales \
+        openssl \
+    ' \
+# Install dependencies
+    && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends ${installDeps} ${runtimeDeps} \
+# Install node.js to enable airdcpp extension support
+    && curl -sL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y --no-install-recommends nodejs \
+# Download and install airdcpp
+    && echo "Downloading ${dl_url}..." \
+    && curl --progress-bar ${dl_url} | tar -xz -C / \
+# Cleanup
+    && apt-get purge --autoremove -y ${installDeps} \
+    && rm -rf /var/lib/apt/lists/*
 
-  develop:
-    name: Develop build
-    runs-on: ubuntu-latest
+# Configure locale
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
+RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
+    && locale-gen && dpkg-reconfigure -f noninteractive locales
 
-    steps:
-      - uses: actions/checkout@v4
+# Create default directories
+RUN mkdir -p /.airdcpp /Downloads /Share \
+    # Set permission on default directories
+    && chmod a+rwX /.airdcpp /Downloads /Share \
+    # Create symlink to configuration directory
+    && ln -sf /.airdcpp /airdcpp-webclient/config \
+    # Fix /favicon.ico 404 request
+    && cd /airdcpp-webclient/web-resources \
+    && ln -sf images/favicon.*.ico favicon.ico
 
-      - name: Download develop build
-        run: |
-          curl -s -L -o airdcpp-develop.tar.gz \
-            https://web-builds.airdcpp.net/develop/airdcpp_latest_develop_64-bit_portable.tar.gz
+# Copy dark mode CSS and inject it as inline <style> into index.html
+COPY dark.css /tmp/dark.css
+RUN INDEX="/airdcpp-webclient/web-resources/index.html" \
+    && awk '/<\/head>/{system("echo \"<style>\""); system("cat /tmp/dark.css"); system("echo \"</style>\"")} {print}' "$INDEX" > /tmp/index.html \
+    && mv /tmp/index.html "$INDEX" \
+    && rm /tmp/dark.css
 
-      - name: Compute SHA256 (develop)
-        id: hash
-        run: |
-          sha256sum airdcpp-develop.tar.gz | awk '{print $1}' > develop.hash
-          if [ -f develop.prev ]; then
-            if diff develop.prev develop.hash > /dev/null; then
-              echo "changed=false" >> $GITHUB_OUTPUT
-            else
-              echo "changed=true" >> $GITHUB_OUTPUT
-            fi
-          else
-            echo "changed=true" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Stop if no change
-        if: steps.hash.outputs.changed == 'false'
-        run: echo "No new develop build."
-
-      - name: Save new hash
-        if: steps.hash.outputs.changed == 'true'
-        run: cp develop.hash develop.prev
-
-      - name: Read hash
-        id: readhash
-        if: steps.hash.outputs.changed == 'true'
-        run: echo "value=$(cat develop.hash)" >> $GITHUB_OUTPUT
-
-      - name: Login to Docker Hub
-        if: steps.hash.outputs.changed == 'true'
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push (develop)
-        if: steps.hash.outputs.changed == 'true'
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          tags: |
-            yourdockerhub/airdcpp:develop
-            yourdockerhub/airdcpp:develop-${{ steps.readhash.outputs.value }}
-
-
-  stable:
-    name: Stable build
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Download stable build
-        run: |
-          curl -s -L -o airdcpp-stable.tar.gz \
-            https://web-builds.airdcpp.net/stable/airdcpp-2.0.0-64-bit-portable.tar.gz
-
-      - name: Compute SHA256 (stable)
-        id: hash
-        run: |
-          sha256sum airdcpp-stable.tar.gz | awk '{print $1}' > stable.hash
-          if [ -f stable.prev ]; then
-            if diff stable.prev stable.hash > /dev/null; then
-              echo "changed=false" >> $GITHUB_OUTPUT
-            else
-              echo "changed=true" >> $GITHUB_OUTPUT
-            fi
-          else
-            echo "changed=true" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Stop if no change
-        if: steps.hash.outputs.changed == 'false'
-        run: echo "No new stable build."
-
-      - name: Save new hash
-        if: steps.hash.outputs.changed == 'true'
-        run: cp stable.hash stable.prev
-
-      - name: Read hash
-        id: readhash
-        if: steps.hash.outputs.changed == 'true'
-        run: echo "value=$(cat stable.hash)" >> $GITHUB_OUTPUT
-
-      - name: Login to Docker Hub
-        if: steps.hash.outputs.changed == 'true'
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push (stable)
-        if: steps.hash.outputs.changed == 'true'
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          tags: |
-            yourdockerhub/airdcpp:stable
-            yourdockerhub/airdcpp:stable-${{ steps.readhash.outputs.value }}
+COPY .airdcpp/ /.default-config
+COPY entrypoint.sh /entrypoint.sh
+EXPOSE 5600 5601 21248 21249
+ENTRYPOINT ["/entrypoint.sh"]
