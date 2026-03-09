@@ -62,9 +62,9 @@ jobs:
           build-args: |
             dl_url=https://web-builds.airdcpp.net/develop/airdcpp_latest_develop_64-bit_portable.tar.gz
           tags: |
-            yourdockerhub/airdcpp:develop
-            yourdockerhub/airdcpp:develop-${{ steps.readhash.outputs.value }}
-            yourdockerhub/airdcpp:latest
+            rafsis/airdcpp-webclient-darkmode:develop
+            rafsis/airdcpp-webclient-darkmode:develop-${{ steps.readhash.outputs.value }}
+            rafsis/airdcpp-webclient-darkmode:latest
 
 
   stable:
@@ -122,5 +122,5 @@ jobs:
           build-args: |
             dl_url=https://web-builds.airdcpp.net/stable/airdcpp-2.0.0-64-bit-portable.tar.gz
           tags: |
-            yourdockerhub/airdcpp:stable
-            yourdockerhub/airdcpp:stable-${{ steps.readhash.outputs.value }}
+            rafsis/airdcpp-webclient-darkmode:stable
+            rafsis/airdcpp-webclient-darkmode:stable-${{ steps.readhash.outputs.value }}
