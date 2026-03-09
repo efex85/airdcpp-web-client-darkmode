@@ -2,7 +2,7 @@ name: Build AirDC++ images (develop + stable)
 
 on:
   schedule:
-    - cron: "0 * * * *"   # every hour
+    - cron: "0 * * * *"
   workflow_dispatch:
 
 jobs:
@@ -14,17 +14,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download develop build
+      - name: Get develop version and URL
+        id: devinfo
         run: |
-          curl -s -L -o airdcpp-develop.tar.gz \
-            https://web-builds.airdcpp.net/develop/airdcpp_latest_develop_64-bit_portable.tar.gz
+          DEV_LINE=$(curl -fsL https://web-builds.airdcpp.net/develop/ \
+            | grep "_64-bit_portable.tar.gz" \
+            | grep -v latest \
+            | sort -t "_" -k1.14rV \
+            | head -n1)
 
-      - name: Compute SHA256 (develop)
+          DEV_TAG=$(echo "$DEV_LINE" | cut -d "_" -f 2)
+          DEV_URL="https://web-builds.airdcpp.net/develop/$(echo "$DEV_LINE" | sed -nr 's/.*href="([^"]+)".*/\1/p')"
+
+          echo "tag=$DEV_TAG" >> $GITHUB_OUTPUT
+          echo "url=$DEV_URL" >> $GITHUB_OUTPUT
+
+      - name: Check if develop version changed
         id: hash
         run: |
-          sha256sum airdcpp-develop.tar.gz | awk '{print $1}' > develop.hash
+          echo "${{ steps.devinfo.outputs.tag }}" > develop.version
           if [ -f develop.prev ]; then
-            if diff develop.prev develop.hash > /dev/null; then
+            if diff develop.prev develop.version > /dev/null; then
               echo "changed=false" >> $GITHUB_OUTPUT
             else
               echo "changed=true" >> $GITHUB_OUTPUT
@@ -35,16 +45,11 @@ jobs:
 
       - name: Stop if no change
         if: steps.hash.outputs.changed == 'false'
-        run: echo "No new develop build."
+        run: echo "No new develop version."
 
-      - name: Save new hash
+      - name: Save new version
         if: steps.hash.outputs.changed == 'true'
-        run: cp develop.hash develop.prev
-
-      - name: Read hash
-        id: readhash
-        if: steps.hash.outputs.changed == 'true'
-        run: echo "value=$(cat develop.hash)" >> $GITHUB_OUTPUT
+        run: cp develop.version develop.prev
 
       - name: Login to Docker Hub
         if: steps.hash.outputs.changed == 'true'
@@ -60,10 +65,10 @@ jobs:
           context: .
           push: true
           build-args: |
-            dl_url=https://web-builds.airdcpp.net/develop/airdcpp_latest_develop_64-bit_portable.tar.gz
+            dl_url=${{ steps.devinfo.outputs.url }}
           tags: |
             rafsis/airdcpp-webclient-darkmode:develop
-            rafsis/airdcpp-webclient-darkmode:develop-${{ steps.readhash.outputs.value }}
+            rafsis/airdcpp-webclient-darkmode:${{ steps.devinfo.outputs.tag }}
             rafsis/airdcpp-webclient-darkmode:latest
 
 
@@ -74,17 +79,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download stable build
+      - name: Get stable version and URL
+        id: stableinfo
         run: |
-          curl -s -L -o airdcpp-stable.tar.gz \
-            https://web-builds.airdcpp.net/stable/airdcpp-2.0.0-64-bit-portable.tar.gz
+          STABLE_LINE=$(curl -fsL https://web-builds.airdcpp.net/stable/ \
+            | grep "_64-bit_portable.tar.gz" \
+            | grep -v latest \
+            | sort -t "_" -k1.14rV \
+            | head -n1)
 
-      - name: Compute SHA256 (stable)
+          STABLE_TAG=$(echo "$STABLE_LINE" | cut -d "_" -f 2)
+          STABLE_URL="https://web-builds.airdcpp.net/stable/$(echo "$STABLE_LINE" | sed -nr 's/.*href="([^"]+)".*/\1/p')"
+
+          echo "tag=$STABLE_TAG" >> $GITHUB_OUTPUT
+          echo "url=$STABLE_URL" >> $GITHUB_OUTPUT
+
+      - name: Check if stable version changed
         id: hash
         run: |
-          sha256sum airdcpp-stable.tar.gz | awk '{print $1}' > stable.hash
+          echo "${{ steps.stableinfo.outputs.tag }}" > stable.version
           if [ -f stable.prev ]; then
-            if diff stable.prev stable.hash > /dev/null; then
+            if diff stable.prev stable.version > /dev/null; then
               echo "changed=false" >> $GITHUB_OUTPUT
             else
               echo "changed=true" >> $GITHUB_OUTPUT
@@ -95,16 +110,11 @@ jobs:
 
       - name: Stop if no change
         if: steps.hash.outputs.changed == 'false'
-        run: echo "No new stable build."
+        run: echo "No new stable version."
 
-      - name: Save new hash
+      - name: Save new version
         if: steps.hash.outputs.changed == 'true'
-        run: cp stable.hash stable.prev
-
-      - name: Read hash
-        id: readhash
-        if: steps.hash.outputs.changed == 'true'
-        run: echo "value=$(cat stable.hash)" >> $GITHUB_OUTPUT
+        run: cp stable.version stable.prev
 
       - name: Login to Docker Hub
         if: steps.hash.outputs.changed == 'true'
@@ -120,8 +130,8 @@ jobs:
           context: .
           push: true
           build-args: |
-            dl_url=https://web-builds.airdcpp.net/stable/airdcpp-2.0.0-64-bit-portable.tar.gz
+            dl_url=${{ steps.stableinfo.outputs.url }}
           tags: |
             rafsis/airdcpp-webclient-darkmode:stable
-            rafsis/airdcpp-webclient-darkmode:stable-${{ steps.readhash.outputs.value }}
+            rafsis/airdcpp-webclient-darkmode:${{ steps.stableinfo.outputs.tag }}
             rafsis/airdcpp-webclient-darkmode:latest
