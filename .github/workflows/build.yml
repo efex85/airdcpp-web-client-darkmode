@@ -1,137 +1,68 @@
-name: Build AirDC++ images (develop + stable)
-
+name: Create Docker image on new release
 on:
-  schedule:
-    - cron: "0 * * * *"
   workflow_dispatch:
-
+  schedule:
+    - cron:  '0 6,12,18,0 * * *'
 jobs:
-
-  develop:
-    name: Develop build
-    runs-on: ubuntu-latest
-
+  buildDockerImage:
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Get develop version and URL
-        id: devinfo
+      -
+        name: Get latest airdcpp releases
         run: |
-          DEV_LINE=$(curl -fsL https://web-builds.airdcpp.net/develop/ \
-            | grep "_64-bit_portable.tar.gz" \
-            | grep -v latest \
-            | sort -t "_" -k1.14rV \
-            | head -n1)
-
-          DEV_TAG=$(echo "$DEV_LINE" | cut -d "_" -f 2)
-          DEV_URL="https://web-builds.airdcpp.net/develop/$(echo "$DEV_LINE" | sed -nr 's/.*href="([^"]+)".*/\1/p')"
-
-          echo "tag=$DEV_TAG" >> $GITHUB_OUTPUT
-          echo "url=$DEV_URL" >> $GITHUB_OUTPUT
-
-      - name: Check if develop version changed
-        id: hash
+          echo "stable_tag=$(curl -fsL https://web-builds.airdcpp.net/stable/ | grep "_64-bit_portable.tar.gz" | grep -v latest | sort -t "_" -k1.14rV | head -n1 | cut -d "_" -f 2)" >> $GITHUB_ENV
+          echo "stable_dl_url=https://web-builds.airdcpp.net/stable/$(curl -fsL https://web-builds.airdcpp.net/stable/ | grep "_64-bit_portable.tar.gz" | grep -v latest | sort -t "_" -k2.1V | tail -n1 | sed -nr 's/.*href="([^"]+)".*/\1/p')" >> $GITHUB_ENV
+          echo "dev_tag=$(curl -fsL https://web-builds.airdcpp.net/develop/ | grep "_64-bit_portable.tar.gz" | grep -v latest | sort -t "_" -k1.14rV | head -n1 | cut -d "_" -f 2)" >> $GITHUB_ENV
+          echo "dev_dl_url=https://web-builds.airdcpp.net/develop/$(curl -fsL https://web-builds.airdcpp.net/develop/ | grep "_64-bit_portable.tar.gz" | grep -v latest | sort -t  '>' -k 3.9,3.12 -k 3.5,3.7M -k 3.2,3.3n | tail -n1 | sed -nr 's/.*href="([^"]+).*/\1/p')" >> $GITHUB_ENV
+      -
+        name: Does the release exist as docker image
         run: |
-          echo "${{ steps.devinfo.outputs.tag }}" > develop.version
-          if [ -f develop.prev ]; then
-            if diff develop.prev develop.version > /dev/null; then
-              echo "changed=false" >> $GITHUB_OUTPUT
-            else
-              echo "changed=true" >> $GITHUB_OUTPUT
-            fi
-          else
-            echo "changed=true" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Stop if no change
-        if: steps.hash.outputs.changed == 'false'
-        run: echo "No new develop version."
-
-      - name: Save new version
-        if: steps.hash.outputs.changed == 'true'
-        run: cp develop.version develop.prev
-
-      - name: Login to Docker Hub
-        if: steps.hash.outputs.changed == 'true'
-        uses: docker/login-action@v3
+          echo "num_rels_found=$(curl -fsL 'https://hub.docker.com/v2/repositories/gangefors/airdcpp-webclient/tags/?page_size=10&ordering=last_updated' | jq -r '.results[].name' | grep -c '^${{env.stable_tag}}$')" >> $GITHUB_ENV
+          echo "num_dev_rels_found=$(curl -fsL 'https://hub.docker.com/v2/repositories/gangefors/airdcpp-webclient/tags/?page_size=10&ordering=last_updated' | jq -r '.results[].name' | grep -c '^${{env.dev_tag}}$')" >> $GITHUB_ENV
+      -
+        name: Details
+        run: |
+          echo "Stable Version: ${{env.stable_tag}} Existing tags: ${{env.num_rels_found}} DlUrl: ${{env.stable_dl_url}}"
+          echo "Develop Version: ${{env.dev_tag}} Existing tags: ${{env.num_dev_rels_found}} DlUrl: ${{env.dev_dl_url}}"
+      -
+        if: ${{ env.num_rels_found == 0 || env.num_dev_rels_found == 0 }}
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        if: ${{ env.num_rels_found == 0 || env.num_dev_rels_found == 0 }}
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      -
+        if: ${{ env.num_rels_found == 0 || env.num_dev_rels_found == 0 }}
+        name: Login to DockerHub
+        uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          username: gangefors
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push (develop)
-        if: steps.hash.outputs.changed == 'true'
-        uses: docker/build-push-action@v6
+      -
+        if: ${{ env.num_rels_found == 0 }}
+        name: Build and push stable
+        id: docker_build
+        uses: docker/build-push-action@v3
         with:
           context: .
-          push: true
           build-args: |
-            dl_url=${{ steps.devinfo.outputs.url }}
+            dl_url=${{env.stable_dl_url}}
+          no-cache: true
+          push: true
           tags: |
-            rafsis/airdcpp-webclient-darkmode:develop
-            rafsis/airdcpp-webclient-darkmode:${{ steps.devinfo.outputs.tag }}
-            rafsis/airdcpp-webclient-darkmode:latest
-
-
-  stable:
-    name: Stable build
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Get stable version and URL
-        id: stableinfo
-        run: |
-          STABLE_LINE=$(curl -fsL https://web-builds.airdcpp.net/stable/ \
-            | grep "_64-bit_portable.tar.gz" \
-            | grep -v latest \
-            | sort -t "_" -k1.14rV \
-            | head -n1)
-
-          STABLE_TAG=$(echo "$STABLE_LINE" | cut -d "_" -f 2)
-          STABLE_URL="https://web-builds.airdcpp.net/stable/$(echo "$STABLE_LINE" | sed -nr 's/.*href="([^"]+)".*/\1/p')"
-
-          echo "tag=$STABLE_TAG" >> $GITHUB_OUTPUT
-          echo "url=$STABLE_URL" >> $GITHUB_OUTPUT
-
-      - name: Check if stable version changed
-        id: hash
-        run: |
-          echo "${{ steps.stableinfo.outputs.tag }}" > stable.version
-          if [ -f stable.prev ]; then
-            if diff stable.prev stable.version > /dev/null; then
-              echo "changed=false" >> $GITHUB_OUTPUT
-            else
-              echo "changed=true" >> $GITHUB_OUTPUT
-            fi
-          else
-            echo "changed=true" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Stop if no change
-        if: steps.hash.outputs.changed == 'false'
-        run: echo "No new stable version."
-
-      - name: Save new version
-        if: steps.hash.outputs.changed == 'true'
-        run: cp stable.version stable.prev
-
-      - name: Login to Docker Hub
-        if: steps.hash.outputs.changed == 'true'
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push (stable)
-        if: steps.hash.outputs.changed == 'true'
-        uses: docker/build-push-action@v6
+            gangefors/airdcpp-webclient:latest
+            gangefors/airdcpp-webclient:${{ env.stable_tag }}
+      -
+        if: ${{ env.num_dev_rels_found == 0 && env.dev_tag != env.stable_tag }}
+        name: Build and push develop
+        id: docker_build_dev
+        uses: docker/build-push-action@v3
         with:
           context: .
-          push: true
           build-args: |
-            dl_url=${{ steps.stableinfo.outputs.url }}
+            dl_url=${{env.dev_dl_url}}
+          no-cache: true
+          push: true
           tags: |
-            rafsis/airdcpp-webclient-darkmode:stable
-            rafsis/airdcpp-webclient-darkmode:${{ steps.stableinfo.outputs.tag }}
-            rafsis/airdcpp-webclient-darkmode:latest
+            rafsis/airdcpp-webclient-darkmode:${{ env.dev_tag }}
