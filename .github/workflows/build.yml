@@ -1,48 +1,63 @@
 name: Create Docker image on new release
+
 on:
   workflow_dispatch:
   schedule:
-    - cron:  '0 6,12,18,0 * * *'
+    - cron: '0 6,12,18,0 * * *'
+
 jobs:
   buildDockerImage:
     runs-on: ubuntu-24.04
+
     steps:
-      -
-        name: Get latest airdcpp releases
+      - name: Get latest airdcpp releases
         run: |
           echo "stable_tag=$(curl -fsL https://web-builds.airdcpp.net/stable/ | grep "_64-bit_portable.tar.gz" | grep -v latest | sort -t "_" -k1.14rV | head -n1 | cut -d "_" -f 2)" >> $GITHUB_ENV
           echo "stable_dl_url=https://web-builds.airdcpp.net/stable/$(curl -fsL https://web-builds.airdcpp.net/stable/ | grep "_64-bit_portable.tar.gz" | grep -v latest | sort -t "_" -k2.1V | tail -n1 | sed -nr 's/.*href="([^"]+)".*/\1/p')" >> $GITHUB_ENV
+
           echo "dev_tag=$(curl -fsL https://web-builds.airdcpp.net/develop/ | grep "_64-bit_portable.tar.gz" | grep -v latest | sort -t "_" -k1.14rV | head -n1 | cut -d "_" -f 2)" >> $GITHUB_ENV
-          echo "dev_dl_url=https://web-builds.airdcpp.net/develop/$(curl -fsL https://web-builds.airdcpp.net/develop/ | grep "_64-bit_portable.tar.gz" | grep -v latest | sort -t  '>' -k 3.9,3.12 -k 3.5,3.7M -k 3.2,3.3n | tail -n1 | sed -nr 's/.*href="([^"]+).*/\1/p')" >> $GITHUB_ENV
-      -
-        name: Does the release exist as docker image
+          echo "dev_dl_url=https://web-builds.airdcpp.net/develop/$(curl -fsL https://web-builds.airdcpp.net/develop/ | grep "_64-bit_portable.tar.gz" | grep -v latest | sort -t '>' -k 3.9,3.12 -k 3.5,3.7M -k 3.2,3.3n | tail -n1 | sed -nr 's/.*href="([^"]+)".*/\1/p')" >> $GITHUB_ENV
+
+      - name: Does the release exist as docker image
         run: |
-          echo "num_rels_found=$(curl -fsL 'https://hub.docker.com/v2/repositories/gangefors/airdcpp-webclient/tags/?page_size=10&ordering=last_updated' | jq -r '.results[].name' | grep -c '^${{env.stable_tag}}$')" >> $GITHUB_ENV
-          echo "num_dev_rels_found=$(curl -fsL 'https://hub.docker.com/v2/repositories/gangefors/airdcpp-webclient/tags/?page_size=10&ordering=last_updated' | jq -r '.results[].name' | grep -c '^${{env.dev_tag}}$')" >> $GITHUB_ENV
-      -
-        name: Details
+          echo "num_rels_found=$(curl -fsL 'https://hub.docker.com/v2/repositories/rafsis/airdcpp-webclient-darkmode/tags/?page_size=50&ordering=last_updated' | jq -r '.results[].name' | grep -c '^${{env.stable_tag}}$')" >> $GITHUB_ENV
+          echo "num_dev_rels_found=$(curl -fsL 'https://hub.docker.com/v2/repositories/rafsis/airdcpp-webclient-darkmode/tags/?page_size=50&ordering=last_updated' | jq -r '.results[].name' | grep -c '^${{env.dev_tag}}$')" >> $GITHUB_ENV
+
+      - name: Determine which is newest
+        run: |
+          # Compare version strings lexicographically
+          if [[ "${{ env.dev_tag }}" > "${{ env.stable_tag }}" ]]; then
+            echo "newest=develop" >> $GITHUB_ENV
+          else
+            echo "newest=stable" >> $GITHUB_ENV
+          fi
+
+      - name: Details
         run: |
           echo "Stable Version: ${{env.stable_tag}} Existing tags: ${{env.num_rels_found}} DlUrl: ${{env.stable_dl_url}}"
           echo "Develop Version: ${{env.dev_tag}} Existing tags: ${{env.num_dev_rels_found}} DlUrl: ${{env.dev_dl_url}}"
-      -
-        if: ${{ env.num_rels_found == 0 || env.num_dev_rels_found == 0 }}
+          echo "Newest: ${{env.newest}}"
+
+      - if: ${{ env.num_rels_found == 0 || env.num_dev_rels_found == 0 }}
         name: Checkout
         uses: actions/checkout@v3
-      -
-        if: ${{ env.num_rels_found == 0 || env.num_dev_rels_found == 0 }}
+
+      - if: ${{ env.num_rels_found == 0 || env.num_dev_rels_found == 0 }}
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-      -
-        if: ${{ env.num_rels_found == 0 || env.num_dev_rels_found == 0 }}
+
+      - if: ${{ env.num_rels_found == 0 || env.num_dev_rels_found == 0 }}
         name: Login to DockerHub
         uses: docker/login-action@v2
         with:
-          username: gangefors
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        if: ${{ env.num_rels_found == 0 }}
+
+      # -------------------------
+      # Build STABLE
+      # -------------------------
+      - if: ${{ env.num_rels_found == 0 }}
         name: Build and push stable
-        id: docker_build
         uses: docker/build-push-action@v3
         with:
           context: .
@@ -51,12 +66,15 @@ jobs:
           no-cache: true
           push: true
           tags: |
-            gangefors/airdcpp-webclient:latest
-            gangefors/airdcpp-webclient:${{ env.stable_tag }}
-      -
-        if: ${{ env.num_dev_rels_found == 0 && env.dev_tag != env.stable_tag }}
+            rafsis/airdcpp-webclient-darkmode:stable
+            rafsis/airdcpp-webclient-darkmode:${{ env.stable_tag }}
+            ${{ env.newest == 'stable' && 'rafsis/airdcpp-webclient-darkmode:latest' || '' }}
+
+      # -------------------------
+      # Build DEVELOP
+      # -------------------------
+      - if: ${{ env.num_dev_rels_found == 0 && env.dev_tag != env.stable_tag }}
         name: Build and push develop
-        id: docker_build_dev
         uses: docker/build-push-action@v3
         with:
           context: .
@@ -65,4 +83,6 @@ jobs:
           no-cache: true
           push: true
           tags: |
+            rafsis/airdcpp-webclient-darkmode:develop
             rafsis/airdcpp-webclient-darkmode:${{ env.dev_tag }}
+            ${{ env.newest == 'develop' && 'rafsis/airdcpp-webclient-darkmode:latest' || '' }}
