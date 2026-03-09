@@ -1,4 +1,4 @@
-name: Check AirDC++ develop build and publish image
+name: Build AirDC++ images (develop + stable)
 
 on:
   schedule:
@@ -6,24 +6,25 @@ on:
   workflow_dispatch:
 
 jobs:
-  check-and-build:
+
+  develop:
+    name: Develop build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Download latest AirDC++ develop build
+      - name: Download develop build
         run: |
-          curl -s -L -o airdcpp-latest.tar.gz \
+          curl -s -L -o airdcpp-develop.tar.gz \
             https://web-builds.airdcpp.net/develop/airdcpp_latest_develop_64-bit_portable.tar.gz
 
-      - name: Compute SHA256 hash
+      - name: Compute SHA256 (develop)
         id: hash
         run: |
-          sha256sum airdcpp-latest.tar.gz | awk '{print $1}' > latest.hash
-          if [ -f previous.hash ]; then
-            if diff previous.hash latest.hash > /dev/null; then
+          sha256sum airdcpp-develop.tar.gz | awk '{print $1}' > develop.hash
+          if [ -f develop.prev ]; then
+            if diff develop.prev develop.hash > /dev/null; then
               echo "changed=false" >> $GITHUB_OUTPUT
             else
               echo "changed=true" >> $GITHUB_OUTPUT
@@ -34,30 +35,87 @@ jobs:
 
       - name: Stop if no change
         if: steps.hash.outputs.changed == 'false'
-        run: echo "No new AirDC++ build detected."
+        run: echo "No new develop build."
 
       - name: Save new hash
         if: steps.hash.outputs.changed == 'true'
-        run: cp latest.hash previous.hash
+        run: cp develop.hash develop.prev
 
-      - name: Read hash value
+      - name: Read hash
         id: readhash
         if: steps.hash.outputs.changed == 'true'
-        run: echo "value=$(cat latest.hash)" >> $GITHUB_OUTPUT
+        run: echo "value=$(cat develop.hash)" >> $GITHUB_OUTPUT
 
-      - name: Log in to Docker Hub
+      - name: Login to Docker Hub
         if: steps.hash.outputs.changed == 'true'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push Docker image
+      - name: Build and push (develop)
         if: steps.hash.outputs.changed == 'true'
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
           tags: |
-            yourdockerhubname/yourimagename:latest
-            yourdockerhubname/yourimagename:${{ steps.readhash.outputs.value }}
+            yourdockerhub/airdcpp:develop
+            yourdockerhub/airdcpp:develop-${{ steps.readhash.outputs.value }}
+
+
+  stable:
+    name: Stable build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download stable build
+        run: |
+          curl -s -L -o airdcpp-stable.tar.gz \
+            https://web-builds.airdcpp.net/stable/airdcpp-2.0.0-64-bit-portable.tar.gz
+
+      - name: Compute SHA256 (stable)
+        id: hash
+        run: |
+          sha256sum airdcpp-stable.tar.gz | awk '{print $1}' > stable.hash
+          if [ -f stable.prev ]; then
+            if diff stable.prev stable.hash > /dev/null; then
+              echo "changed=false" >> $GITHUB_OUTPUT
+            else
+              echo "changed=true" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Stop if no change
+        if: steps.hash.outputs.changed == 'false'
+        run: echo "No new stable build."
+
+      - name: Save new hash
+        if: steps.hash.outputs.changed == 'true'
+        run: cp stable.hash stable.prev
+
+      - name: Read hash
+        id: readhash
+        if: steps.hash.outputs.changed == 'true'
+        run: echo "value=$(cat stable.hash)" >> $GITHUB_OUTPUT
+
+      - name: Login to Docker Hub
+        if: steps.hash.outputs.changed == 'true'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push (stable)
+        if: steps.hash.outputs.changed == 'true'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            yourdockerhub/airdcpp:stable
+            yourdockerhub/airdcpp:stable-${{ steps.readhash.outputs.value }}
