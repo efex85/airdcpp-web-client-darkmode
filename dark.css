@@ -1,1801 +1,484 @@
-/*
- * AirDC++ Web Client — Dark Mode Theme
- * Mount into container at: /airdcpp-webclient/web-resources/css/dark.css
- *
- * Color palette:
- *   bg-deepest:  #0f1117   (page background)
- *   bg-dark:     #181a22   (cards, panels)
- *   bg-mid:      #1e2130   (inputs, table headers)
- *   bg-hover:    #262a3a   (hover states)
- *   bg-active:   #2d3348   (active/selected)
- *   border:      #2a2e3e   (borders, dividers)
- *   text-primary:#d0d4e0   (main text)
- *   text-muted:  #8890a4   (secondary text)
- *   accent:      #4a9eff   (links, highlights)
- *   accent-hover:#6db3ff   (link hover)
- *   green:       #48c78e   (online/positive)
- *   red:         #f14668   (errors/negative)
- *   orange:      #f0a020   (warnings)
- */
+/* AirDC++ Web Client — Dark Mode Theme */
 
-/* ============================================
-   BASE / GLOBAL
-   ============================================ */
-
-html {
-  background-color: #0f1117 !important;
-  color: #d0d4e0 !important;
+/* === BASE === */
+html { background-color: #0f1117 !important; color: #d0d4e0 !important; }
+body, body#dimmable-page, html body, html body#dimmable-page {
+  background: #0f1117 !important; background-color: #0f1117 !important; color: #d0d4e0 !important;
 }
 
-body,
-body#dimmable-page,
-html body,
-html body#dimmable-page {
-  background: #0f1117 !important;
-  background-color: #0f1117 !important;
-  color: #d0d4e0 !important;
+/* === TEXT SELECTION === */
+::selection { background-color: #264f78 !important; color: #ffffff !important; }
+::-moz-selection { background-color: #264f78 !important; color: #ffffff !important; }
+
+/* === NAVIGATION === */
+.ui.menu, .ui.menu.fixed, .ui.inverted.menu, .ui.secondary.menu,
+.ui.top.menu, .ui.menu:not(.vertical), header, nav {
+  background-color: #13151d !important; border-bottom: 1px solid #2a2e3e !important;
 }
+.ui.menu .item, .ui.menu a.item, .ui.menu .item > a { color: #8890a4 !important; }
+.ui.menu .item:hover, .ui.menu a.item:hover { background-color: #1e2130 !important; color: #d0d4e0 !important; }
+.ui.menu .item.active, .ui.menu .active.item, .ui.menu a.item.active { background-color: #1e2130 !important; color: #4a9eff !important; border-color: #4a9eff !important; }
+.ui.menu .item i.icon { color: inherit !important; }
+.ui.vertical.menu, .ui.vertical.icon.menu { background-color: #13151d !important; border-left: 1px solid #2a2e3e !important; }
+.ui.vertical.menu .item { color: #8890a4 !important; border-bottom: 1px solid #1e2130 !important; }
+.ui.vertical.menu .item:hover { background-color: #1e2130 !important; color: #d0d4e0 !important; }
+.ui.vertical.menu .item.active { background-color: #1e2130 !important; color: #4a9eff !important; }
 
-/* ============================================
-   TOP NAVIGATION BAR
-   ============================================ */
-
-.ui.menu,
-.ui.menu.fixed,
-.ui.inverted.menu,
-.ui.secondary.menu,
-.ui.top.menu,
-.ui.menu:not(.vertical),
-header,
-nav {
-  background-color: #13151d !important;
-  border-bottom: 1px solid #2a2e3e !important;
-}
-
-.ui.menu .item,
-.ui.menu a.item,
-.ui.menu .item > a {
-  color: #8890a4 !important;
-}
-
-.ui.menu .item:hover,
-.ui.menu a.item:hover {
-  background-color: #1e2130 !important;
-  color: #d0d4e0 !important;
-}
-
-.ui.menu .item.active,
-.ui.menu .active.item,
-.ui.menu a.item.active {
-  background-color: #1e2130 !important;
-  color: #4a9eff !important;
-  border-color: #4a9eff !important;
-}
-
-/* Right sidebar nav icons */
-.ui.vertical.menu,
-.ui.vertical.icon.menu {
-  background-color: #13151d !important;
-  border-left: 1px solid #2a2e3e !important;
-}
-
-.ui.vertical.menu .item {
-  color: #8890a4 !important;
-  border-bottom: 1px solid #1e2130 !important;
-}
-
-.ui.vertical.menu .item:hover {
-  background-color: #1e2130 !important;
-  color: #d0d4e0 !important;
-}
-
-.ui.vertical.menu .item.active {
-  background-color: #1e2130 !important;
-  color: #4a9eff !important;
-}
-
-/* ============================================
-   SEGMENTS / CARDS / PANELS (the dashboard boxes)
-   ============================================ */
-
-.ui.segment,
-.ui.segments,
-.ui.segments .segment,
-.ui.raised.segment,
-.ui.stacked.segment,
-.ui.piled.segment {
+/* === SEGMENTS / PANELS === */
+.ui.segment, .ui.segments, .ui.segments .segment,
+.ui.raised.segment, .ui.stacked.segment, .ui.piled.segment {
   background-color: rgba(24, 26, 34, 0.85) !important;
-  border: 1px solid #2a2e3e !important;
+  border: 1px solid rgba(42, 46, 62, 0.6) !important;
   color: #d0d4e0 !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
-}
-
-.ui.segment .header,
-.ui.segment h3,
-.ui.segment h4 {
-  color: #d0d4e0 !important;
-}
-
-/* ============================================
-   HEADERS / HEADINGS
-   ============================================ */
-
-h1, h2, h3, h4, h5, h6,
-.ui.header,
-.ui.header .content,
-.ui.huge.header,
-.ui.large.header,
-.ui.medium.header,
-.ui.small.header,
-.ui.tiny.header,
-.ui.sub.header {
-  color: #d0d4e0 !important;
-}
-
-.ui.dividing.header {
-  border-bottom-color: #2a2e3e !important;
-}
-
-/* ============================================
-   LINKS
-   ============================================ */
-
-a,
-a:link {
-  color: #4a9eff;
-}
-
-a:hover {
-  color: #6db3ff;
-}
-
-a:visited {
-  color: #7c8aff;
-}
-
-/* ============================================
-   TABLES
-   ============================================ */
-
-.ui.table {
-  background-color: #181a22 !important;
-  color: #d0d4e0 !important;
-  border: 1px solid #2a2e3e !important;
-}
-
-.ui.table thead th,
-.ui.table thead tr th {
-  background-color: #1e2130 !important;
-  color: #8890a4 !important;
-  border-bottom: 1px solid #2a2e3e !important;
-}
-
-.ui.table tbody tr {
-  background-color: #181a22 !important;
-}
-
-.ui.table tbody tr:nth-child(even) {
-  background-color: #1c1e28 !important;
-}
-
-.ui.table tbody tr:hover {
-  background-color: #262a3a !important;
-}
-
-.ui.table td {
-  color: #d0d4e0 !important;
-  border-top: 1px solid #222536 !important;
-}
-
-.ui.table tfoot th {
-  background-color: #1e2130 !important;
-  border-top: 1px solid #2a2e3e !important;
-}
-
-.ui.sortable.table thead th {
-  background-color: #1e2130 !important;
-  color: #8890a4 !important;
-}
-
-.ui.sortable.table thead th:hover {
-  background-color: #262a3a !important;
-  color: #d0d4e0 !important;
-}
-
-/* ============================================
-   FORMS / INPUTS
-   ============================================ */
-
-.ui.input input,
-.ui.form input,
-.ui.form textarea,
-.ui.form select,
-input,
-textarea,
-select {
-  background-color: #1e2130 !important;
-  color: #d0d4e0 !important;
-  border: 1px solid #2a2e3e !important;
-}
-
-.ui.input input:focus,
-.ui.form input:focus,
-.ui.form textarea:focus,
-input:focus,
-textarea:focus {
-  background-color: #222536 !important;
-  border-color: #4a9eff !important;
-  color: #d0d4e0 !important;
-}
-
-.ui.input input::placeholder,
-input::placeholder,
-textarea::placeholder {
-  color: #5a6178 !important;
-}
-
-/* ============================================
-   BUTTONS
-   ============================================ */
-
-.ui.button {
-  background-color: #262a3a !important;
-  color: #d0d4e0 !important;
-  border: 1px solid #2a2e3e !important;
-}
-
-.ui.button:hover {
-  background-color: #2d3348 !important;
-  color: #ffffff !important;
-}
-
-.ui.primary.button {
-  background-color: #4a9eff !important;
-  color: #0f1117 !important;
-  border: none !important;
-}
-
-.ui.primary.button:hover {
-  background-color: #6db3ff !important;
-}
-
-.ui.positive.button,
-.ui.green.button {
-  background-color: #48c78e !important;
-  color: #0f1117 !important;
-}
-
-.ui.negative.button,
-.ui.red.button {
-  background-color: #f14668 !important;
-  color: #ffffff !important;
-}
-
-/* ============================================
-   DROPDOWNS
-   ============================================ */
-
-.ui.dropdown .menu,
-.ui.selection.dropdown .menu,
-.ui.dropdown .menu > .item {
-  background-color: #1e2130 !important;
-  color: #d0d4e0 !important;
-  border-color: #2a2e3e !important;
-}
-
-.ui.dropdown .menu > .item:hover,
-.ui.dropdown .menu .active.item {
-  background-color: #262a3a !important;
-  color: #ffffff !important;
-}
-
-.ui.selection.dropdown {
-  background-color: #1e2130 !important;
-  color: #d0d4e0 !important;
-  border-color: #2a2e3e !important;
-}
-
-.ui.dropdown > .text,
-.ui.dropdown .menu > .item {
-  color: #d0d4e0 !important;
-}
-
-/* ============================================
-   MODALS / POPUPS
-   ============================================ */
-
-.ui.modal,
-.ui.modal > .content,
-.ui.modal > .header,
-.ui.modal > .actions {
-  background-color: #181a22 !important;
-  color: #d0d4e0 !important;
-  border-color: #2a2e3e !important;
-}
-
-.ui.dimmer {
-  background-color: rgba(0, 0, 0, 0.75) !important;
-}
-
-.ui.popup {
-  background-color: #1e2130 !important;
-  color: #d0d4e0 !important;
-  border: 1px solid #2a2e3e !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
-}
-
-.ui.popup::before {
-  background-color: #1e2130 !important;
-  border-color: #2a2e3e !important;
-}
-
-/* ============================================
-   LABELS / BADGES
-   ============================================ */
-
-.ui.label {
-  background-color: #262a3a !important;
-  color: #d0d4e0 !important;
-  border: 1px solid #2a2e3e !important;
-}
-
-.ui.blue.label {
-  background-color: #4a9eff !important;
-  color: #0f1117 !important;
-}
-
-.ui.green.label {
-  background-color: #48c78e !important;
-  color: #0f1117 !important;
-}
-
-.ui.red.label {
-  background-color: #f14668 !important;
-  color: #ffffff !important;
-}
-
-.ui.orange.label,
-.ui.yellow.label {
-  background-color: #f0a020 !important;
-  color: #0f1117 !important;
-}
-
-/* ============================================
-   MESSAGES / NOTIFICATIONS
-   ============================================ */
-
-.ui.message {
-  background-color: #1e2130 !important;
-  color: #d0d4e0 !important;
-  border: 1px solid #2a2e3e !important;
-  box-shadow: 0 0 0 1px #2a2e3e inset !important;
-}
-
-.ui.info.message {
-  background-color: #182538 !important;
-  border-color: #2a4a6e !important;
-}
-
-.ui.success.message,
-.ui.positive.message {
-  background-color: #1a2e24 !important;
-  border-color: #2a5e3e !important;
-}
-
-.ui.error.message,
-.ui.negative.message {
-  background-color: #2e1a1e !important;
-  border-color: #5e2a3e !important;
-}
-
-.ui.warning.message {
-  background-color: #2e2a1a !important;
-  border-color: #5e4a2a !important;
-}
-
-/* ============================================
-   TABS
-   ============================================ */
-
-.ui.tabular.menu {
-  border-bottom-color: #2a2e3e !important;
-}
-
-.ui.tabular.menu .item {
-  background-color: transparent !important;
-  color: #8890a4 !important;
-  border-color: transparent !important;
-}
-
-.ui.tabular.menu .active.item {
-  background-color: #181a22 !important;
-  color: #d0d4e0 !important;
-  border-color: #2a2e3e !important;
-  border-bottom-color: #181a22 !important;
-}
-
-/* ============================================
-   PROGRESS BARS
-   ============================================ */
-
-.ui.progress {
-  background-color: #1e2130 !important;
-}
-
-.ui.progress .bar {
-  background-color: #4a9eff !important;
-}
-
-.ui.progress .label {
-  color: #8890a4 !important;
-}
-
-/* ============================================
-   LOADERS / SPINNERS
-   ============================================ */
-
-.ui.loader:after {
-  border-color: #4a9eff transparent transparent !important;
-}
-
-/* ============================================
-   SIDEBAR
-   ============================================ */
-
-.ui.sidebar,
-.ui.left.sidebar,
-.ui.right.sidebar {
-  background-color: #13151d !important;
-  border-color: #2a2e3e !important;
-}
-
-/* ============================================
-   DIVIDERS
-   ============================================ */
-
-.ui.divider {
-  border-color: #2a2e3e !important;
-  color: #8890a4 !important;
-}
-
-hr {
-  border-color: #2a2e3e !important;
-}
-
-/* ============================================
-   ICONS (ensure visibility)
-   ============================================ */
-
-i.icon {
-  color: #8890a4 !important;
-}
-
-.ui.menu .item i.icon {
-  color: inherit !important;
-}
-
-/* ============================================
-   STATISTICS / WIDGETS (dashboard panels)
-   ============================================ */
-
-.ui.statistic > .value,
-.ui.statistics .statistic > .value {
-  color: #d0d4e0 !important;
-}
-
-.ui.statistic > .label,
-.ui.statistics .statistic > .label {
-  color: #8890a4 !important;
-}
-
-/* ============================================
-   LISTS
-   ============================================ */
-
-.ui.list .item,
-.ui.list .item .header {
-  color: #d0d4e0 !important;
-}
-
-.ui.list .item .description {
-  color: #8890a4 !important;
-}
-
-.ui.divided.list .item {
-  border-top-color: #2a2e3e !important;
-}
-
-/* ============================================
-   CARDS
-   ============================================ */
-
-.ui.card,
-.ui.cards > .card {
-  background-color: #181a22 !important;
-  border: 1px solid #2a2e3e !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
-}
-
-.ui.card > .content,
-.ui.cards > .card > .content {
-  border-top-color: #2a2e3e !important;
-}
-
-.ui.card > .content > .header,
-.ui.cards > .card > .content > .header {
-  color: #d0d4e0 !important;
-}
-
-.ui.card > .content > .description,
-.ui.cards > .card > .content > .description {
-  color: #8890a4 !important;
-}
-
-/* ============================================
-   ACCORDION
-   ============================================ */
-
-.ui.accordion .title,
-.ui.accordion .title:not(.ui) {
-  color: #d0d4e0 !important;
-}
-
-.ui.accordion .content {
-  color: #d0d4e0 !important;
-}
-
-/* ============================================
-   BREADCRUMBS
-   ============================================ */
-
-.ui.breadcrumb {
-  color: #8890a4 !important;
-}
-
-.ui.breadcrumb a {
-  color: #4a9eff !important;
-}
-
-.ui.breadcrumb .divider {
-  color: #5a6178 !important;
-}
-
-/* ============================================
-   PAGINATION
-   ============================================ */
-
-.ui.pagination.menu .item {
-  background-color: #1e2130 !important;
-  color: #d0d4e0 !important;
-}
-
-.ui.pagination.menu .active.item {
-  background-color: #4a9eff !important;
-  color: #0f1117 !important;
-}
-
-/* ============================================
-   CHECKBOX / RADIO / TOGGLE
-   ============================================ */
-
-.ui.checkbox label,
-.ui.radio.checkbox label {
-  color: #d0d4e0 !important;
-}
-
-.ui.checkbox input:checked ~ label:before {
-  background-color: #4a9eff !important;
-  border-color: #4a9eff !important;
-}
-
-.ui.toggle.checkbox label:before {
-  background-color: #2a2e3e !important;
-}
-
-.ui.toggle.checkbox input:checked ~ label:before {
-  background-color: #48c78e !important;
-}
-
-/* ============================================
-   SCROLLBARS (webkit browsers)
-   ============================================ */
-
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #0f1117;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #2a2e3e;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #3a3f52;
-}
-
-/* ============================================
-   TRANSFER GRAPH (the chart on dashboard)
-   ============================================ */
-
-canvas {
-  background-color: #0f1117 !important;
-  opacity: 0.9;
-}
-
-/* ============================================
-   MISC / CATCH-ALL
-   ============================================ */
-
-/* Generic text color fallback */
-p, span, div, li, td, th, dt, dd, blockquote, pre, code {
-  color: inherit;
-}
-
-code, pre {
-  background-color: #1e2130 !important;
-  border-color: #2a2e3e !important;
-}
-
-/* Selection highlight */
-::selection {
-  background-color: #4a9eff;
-  color: #0f1117;
-}
-
-/* Tooltip overrides */
-[data-tooltip]:after {
-  background-color: #1e2130 !important;
-  color: #d0d4e0 !important;
-  border: 1px solid #2a2e3e !important;
-}
-
-[data-tooltip]:before {
-  background-color: #1e2130 !important;
-}
-
-/* "Add widget" and similar UI elements */
-.ui.placeholder.segment {
-  background-color: #13151d !important;
-  border: 2px dashed #2a2e3e !important;
-}
-
-/* RSS/News section text */
-.date,
-.meta,
-time {
-  color: #5a6178 !important;
-}
-
-/* ============================================
-   AGGRESSIVE CATCH-ALL: Main content area
-   Targets the white backgrounds in Messages,
-   Hubs, Filelists, Files, Events views
-   ============================================ */
-
-/* Nuclear option: any div/section/main with white or light bg */
-div, section, main, article, aside, footer, header, nav,
-.content, .main, .page, .view, .panel, .container, .wrapper {
-  background-color: transparent;
-  color: inherit;
-}
-
-/* Force the root app container and all major layout divs */
-#root,
-#app,
-#root > div,
-#app > div,
-[class*="layout"],
-[class*="Layout"],
-[class*="container"],
-[class*="Container"],
-[class*="content"],
-[class*="Content"],
-[class*="page"],
-[class*="Page"],
-[class*="view"],
-[class*="View"],
-[class*="panel"],
-[class*="Panel"],
-[class*="wrapper"],
-[class*="Wrapper"],
-[class*="main"],
-[class*="Main"],
-[class*="session"],
-[class*="Session"],
-[class*="message"],
-[class*="Message"],
-[class*="chat"],
-[class*="Chat"],
-[class*="filelist"],
-[class*="Filelist"],
-[class*="FileList"],
-[class*="file-list"],
-[class*="event"],
-[class*="Event"],
-[class*="hub"],
-[class*="Hub"],
-[class*="list"],
-[class*="List"] {
-  background-color: #0f1117 !important;
-  color: #d0d4e0 !important;
-}
-
-/* The left sidebar/session list (Messages, Hubs views) */
-[class*="sidebar"],
-[class*="Sidebar"],
-[class*="side-bar"],
-[class*="session-list"],
-[class*="SessionList"],
-[class*="tab-list"],
-[class*="TabList"] {
-  background-color: #13151d !important;
-  border-right: 1px solid #2a2e3e !important;
-}
-
-/* Session/list items */
-[class*="session"] a,
-[class*="Session"] a,
-[class*="item-link"],
-[class*="ItemLink"],
-[class*="list-item"],
-[class*="ListItem"] {
-  color: #4a9eff !important;
-}
-
-/* Row hover for any list-like view — very subtle */
-[class*="row"]:hover,
-[class*="Row"]:hover,
-[class*="item"]:hover,
-[class*="Item"]:hover {
-  background-color: rgba(30, 33, 48, 0.3) !important;
-}
-
-/* The "New session" / "Open filelist" top bar areas */
-[class*="header-bar"],
-[class*="HeaderBar"],
-[class*="toolbar"],
-[class*="Toolbar"],
-[class*="action-bar"],
-[class*="ActionBar"],
-[class*="top-bar"],
-[class*="TopBar"] {
-  background-color: #13151d !important;
-  border-bottom: 1px solid #2a2e3e !important;
-}
-
-/* Ensure all text inputs in these views are dark */
-[class*="content"] input,
-[class*="Content"] input,
-[class*="view"] input,
-[class*="View"] input {
-  background-color: #1e2130 !important;
-  color: #d0d4e0 !important;
-  border: 1px solid #2a2e3e !important;
-}
-
-/* ============================================
-   SEMANTIC UI: More specific overrides
-   ============================================ */
-
-/* The "attached" segments often used for content areas */
-.ui.attached.segment,
-.ui.top.attached.segment,
-.ui.bottom.attached.segment {
-  background-color: #0f1117 !important;
-  border-color: #2a2e3e !important;
-}
-
-/* Basic segment (no border/shadow, but still white bg) */
-.ui.basic.segment {
-  background-color: #0f1117 !important;
-}
-
-/* Item views */
-.ui.items > .item,
-.ui.items > .item > .content,
-.ui.items > .item > .content > .header,
-.ui.items > .item > .content > .description,
-.ui.items > .item > .content > .extra {
-  color: #d0d4e0 !important;
-}
-
-.ui.items > .item {
-  border-bottom: 1px solid #1e2130 !important;
-}
-
-.ui.items > .item:hover {
-  background-color: #181a22 !important;
-}
-
-/* Feed/Activity views (Events page) */
-.ui.feed,
-.ui.feed > .event,
-.ui.feed > .event > .content,
-.ui.feed > .event > .content .summary,
-.ui.feed > .event > .content .date,
-.ui.feed > .event > .content .extra {
-  color: #d0d4e0 !important;
-  background-color: transparent !important;
-}
-
-.ui.feed > .event {
-  border-bottom: 1px solid #1e2130 !important;
-}
-
-/* Secondary/pointing menus (often used as sub-navs) */
-.ui.secondary.pointing.menu {
-  border-bottom-color: #2a2e3e !important;
-  background-color: transparent !important;
-}
-
-.ui.secondary.pointing.menu .item {
-  border-bottom-color: transparent !important;
-  color: #8890a4 !important;
-  background-color: transparent !important;
-}
-
-.ui.secondary.pointing.menu .active.item {
-  border-bottom-color: #4a9eff !important;
-  color: #4a9eff !important;
-  background-color: transparent !important;
-}
-
-/* Grid layouts */
-.ui.grid,
-.ui.grid > .row,
-.ui.grid > .column,
-.ui.grid > .row > .column {
-  background-color: transparent !important;
-}
-
-/* Stacked/grouped segments */
-.ui.segments,
-.ui.segments > .segment {
-  background-color: rgba(24, 26, 34, 0.85) !important;
-  border-color: #2a2e3e !important;
-}
-
-/* ============================================
-   AIRDCPP-SPECIFIC ELEMENTS (from DevTools)
-   ============================================ */
-
-/* The main background wrapper — let the app's background image show */
-#background-wrapper {
-  background-color: transparent !important;
-}
-
-/* Main app structure — all transparent so background image shows */
-#container-main,
-#authenticated-app,
-#normal-layout,
-#dimmable-page {
-  background-color: transparent !important;
-}
-
-/* Mobile/main layout — transparent so background image shows between panels */
-#mobile-layout,
-.main-layout,
-.main-layout.pushable,
-.ui.pushable,
-.pushable,
-.ui.site-content,
-.site-content {
-  background-color: transparent !important;
-}
-
-/* Session content panel — solid dark */
-#session-content-panel,
-.session-content-panel,
-.content-column,
-.content-column.session,
-[id="session-content-panel"] {
-  background-color: #0f1117 !important;
-  color: #d0d4e0 !important;
-}
-
-/* Sidebar container and session list */
-#sidebar-container,
-#sidebar,
-.sidebar-container,
-.session-container,
-.session-container.horizontal {
-  background-color: #13151d !important;
-}
-
-/* The left nav column with session items */
-.menu-column,
-nav.menu-column,
-nav[aria-label="session items"],
-nav.four.wide.column.menu-column {
-  background-color: #13151d !important;
-  border-right: 1px solid #2a2e3e !important;
-}
-
-/* Session tab items in left sidebar */
-.menu-column .item,
-.menu-column a.item,
-nav.menu-column .item {
-  background-color: transparent !important;
-  color: #d0d4e0 !important;
-  border-bottom: 1px solid #1e2130 !important;
-}
-
-.menu-column .item:hover,
-.menu-column a.item:hover {
-  background-color: #1e2130 !important;
-}
-
-.menu-column .item.active,
-.menu-column a.item.active {
-  background-color: #1e2130 !important;
-  color: #4a9eff !important;
-}
-
-/* Side menu (right icon sidebar) */
-#side-menu {
-  background-color: #13151d !important;
-  border-left: 1px solid #2a2e3e !important;
-}
-
-/* Pusher / dimmer elements */
-.pusher,
-.pusher.dimmed {
-  background-color: transparent !important;
-}
-
-/* The twelve-wide stretched column */
-.twelve.wide.stretched.column,
-.twelve.wide.column {
-  background-color: transparent !important;
-}
-
-/* ============================================
-   FINAL NUCLEAR: Override any inline white bg
-   ============================================ */
-
-/* This catches elements with inline style background white */
-[style*="background-color: white"],
-[style*="background-color: #fff"],
-[style*="background-color: #ffffff"],
-[style*="background-color: rgb(255, 255, 255)"],
-[style*="background: white"],
-[style*="background: #fff"],
-[style*="background: #ffffff"],
-[style*="background: rgb(255, 255, 255)"] {
-  background-color: #0f1117 !important;
-}
-
-/* Catch remaining white-ish elements by their computed look */
-.white, .bg-white, .background-white {
-  background-color: #0f1117 !important;
-}
-
-/* ============================================
-   RE-APPLY: Key container backgrounds
-   ============================================ */
-
-/* Then re-apply our intended backgrounds on the key containers */
-html {
-  background-color: #0f1117 !important;
-}
-
-body {
-  background: #0f1117 !important;
-  background-color: #0f1117 !important;
-}
-
-/* Re-apply nav backgrounds after wildcard reset */
-.ui.menu,
-.ui.menu.fixed,
-.ui.inverted.menu,
-.ui.vertical.menu,
-.ui.vertical.icon.menu,
-header, nav {
-  background-color: #13151d !important;
-}
-
-/* Re-apply segment/card backgrounds */
-.ui.segment,
-.ui.segments,
-.ui.segments .segment,
-.ui.raised.segment {
-  background-color: rgba(24, 26, 34, 0.85) !important;
-  backdrop-filter: blur(10px) !important;
-  -webkit-backdrop-filter: blur(10px) !important;
-}
-
-/* Re-apply input backgrounds */
-input, textarea, select,
-.ui.input input,
-.ui.form input,
-.ui.form textarea,
-.ui.form select,
-.ui.selection.dropdown {
-  background-color: #1e2130 !important;
-}
-
-/* Re-apply table header backgrounds */
-.ui.table thead th {
-  background-color: #1e2130 !important;
-}
-
-/* Re-apply button backgrounds */
-.ui.button {
-  background-color: #262a3a !important;
-}
-.ui.primary.button {
-  background-color: #4a9eff !important;
-}
-
-/* Re-apply dropdown menu backgrounds */
-.ui.dropdown .menu,
-.ui.selection.dropdown .menu {
-  background-color: #1e2130 !important;
-}
-
-/* Re-apply modal backgrounds */
-.ui.modal,
-.ui.modal > .content,
-.ui.modal > .header,
-.ui.modal > .actions {
-  background-color: #181a22 !important;
-}
-
-/* Re-apply popup backgrounds */
-.ui.popup {
-  background-color: #1e2130 !important;
-}
-
-/* Links need color re-applied (no !important to preserve app's shared-file colors) */
-a, a:link {
-  color: #4a9eff;
-}
-
-/* Muted/secondary text */
-.date, .meta, time, .description, .sub {
-  color: #8890a4 !important;
-}
-
-/* Icons — force bright enough to see on dark backgrounds */
-i.icon {
-  color: #b0b8cc !important;
-}
-
-/* Right sidebar icons need to be clearly visible */
-#side-menu i.icon,
-#side-menu .icon,
-.ui.vertical.icon.menu i.icon,
-.ui.vertical.icon.menu .icon,
-.ui.vertical.menu i.icon {
-  color: #c0c8dc !important;
-}
-
-#side-menu .item:hover i.icon,
-.ui.vertical.icon.menu .item:hover i.icon {
-  color: #ffffff !important;
-}
-
-#side-menu .item.active i.icon,
-.ui.vertical.icon.menu .item.active i.icon {
-  color: #4a9eff !important;
-}
-
-/* Right sidebar label text (Hubs, Messages, etc.) */
-#side-menu .item,
-#side-menu .item span,
-#side-menu .item .text,
-#side-menu .item label {
-  color: #b0b8cc !important;
-}
-
-/* Active menu items */
-.ui.menu .active.item,
-.ui.vertical.menu .active.item {
-  color: #4a9eff !important;
-}
-
-/* ============================================
-   DROPDOWN MENU FIX (Settings/Logout menu)
-   ============================================ */
-
-/* The top-right dropdown (chevron menu) */
-.ui.dropdown .menu,
-.ui.dropdown .menu.visible,
-.ui.dropdown .menu.transition,
-.ui.pointing.dropdown > .menu,
-.ui.top.right.pointing.dropdown > .menu,
-div.ui.dropdown .menu,
-.ui.simple.dropdown .menu {
-  background-color: #181a22 !important;
-  border: 1px solid #2a2e3e !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
-}
-
-.ui.dropdown .menu > .item,
-.ui.dropdown .menu > a.item,
-.ui.dropdown .menu > .item > .text {
-  color: #d0d4e0 !important;
-  background-color: transparent !important;
-}
-
-.ui.dropdown .menu > .item:hover,
-.ui.dropdown .menu > a.item:hover {
-  background-color: #262a3a !important;
-  color: #ffffff !important;
-}
-
-.ui.dropdown .menu > .divider {
-  border-top-color: #2a2e3e !important;
-}
-
-.ui.dropdown .menu > .header {
-  color: #8890a4 !important;
-}
-
-/* Dropdown icons */
-.ui.dropdown .menu > .item i.icon,
-.ui.dropdown .menu > .item .icon {
-  color: #8890a4 !important;
-}
-
-.ui.dropdown .menu > .item:hover i.icon {
-  color: #d0d4e0 !important;
-}
-
-/* ============================================
-   CONTENT AREA: deeper targeting
-   ============================================ */
-
-/* Target the tabpanel role div (session content) */
-[role="tabpanel"],
-div[role="tabpanel"] {
-  background-color: #0f1117 !important;
-  color: #d0d4e0 !important;
-}
-
-/* Any child of the main layout that might be white */
-#normal-layout div,
-#authenticated-app div,
-.main-layout div {
-  background-color: transparent;
-}
-
-/* The session content specifically — more aggressive */
-#session-content-panel,
-#session-content-panel > div,
-#session-content-panel > div > div {
-  background-color: #0f1117 !important;
-}
-
-/* SVG icons that might be dark */
-svg, svg path, svg circle, svg rect {
-  fill: currentColor;
-}
-
-/* Notification badges */
-.ui.label.circular,
-.floating.label,
-.ui.floating.label {
-  color: #ffffff !important;
-}
-
-/* ============================================
-   FOOTER / STATUS BAR / USER LIST PANEL
-   ============================================ */
-
-/* Bottom bars, footers, status areas */
-footer,
-.footer,
-.table-footer,
-[class*="footer"],
-[class*="Footer"],
-[class*="status-bar"],
-[class*="StatusBar"],
-[class*="status_bar"],
-[class*="bottom-bar"],
-[class*="BottomBar"],
-[class*="action-bar"],
-[class*="ActionBar"],
-[class*="toolbar"],
-[class*="Toolbar"] {
-  background-color: #13151d !important;
-  background-image: none !important;
-  color: #d0d4e0 !important;
-  border-top: 1px solid #2a2e3e !important;
-}
-
-/* User list panel */
-[class*="user-list"],
-[class*="UserList"],
-[class*="userlist"],
-[class*="user_list"],
-[class*="users-panel"],
-[class*="UsersPanel"] {
-  background-color: #0f1117 !important;
-  color: #d0d4e0 !important;
-}
-
-/* Bottom attached segments */
-.ui.bottom.attached.segment,
-.ui.bottom.attached.menu,
-.ui.bottom.segment,
-.ui.bottom.menu,
-.ui.bottom.attached,
-.ui.menu.bottom,
-.ui.attached.menu {
-  background-color: #13151d !important;
-  border-color: #2a2e3e !important;
-  color: #d0d4e0 !important;
-}
-
-/* Any remaining white bars — target by position */
-.ui.grid > .row:last-child,
-.ui.segment:last-child {
-  background-color: transparent !important;
-}
-
-/* The filter bar area specifically */
-[class*="filter"],
-[class*="Filter"] {
-  background-color: #13151d !important;
-  color: #d0d4e0 !important;
-}
-
-/* Filelist bottom bar / info bar */
-[class*="filelist"] .bottom,
-[class*="Filelist"] .bottom,
-[class*="file-list"] .bottom,
-[class*="FileList"] .bottom,
-.left.normal .bottom,
-.session-layout .bottom,
-[class*="directory"],
-[class*="Directory"] {
-  background-color: #13151d !important;
-  color: #d0d4e0 !important;
-}
-
-/* Catch any element at the bottom of a flex container that's white */
-.session-layout > div:last-child,
-.message-view > div:last-child,
-[class*="view"] > div:last-child,
-[class*="View"] > div:last-child {
-  background-color: #13151d !important;
-  color: #d0d4e0 !important;
-}
-
-/* The "Directory size" / "Total list size" info bar */
-[class*="info-bar"],
-[class*="InfoBar"],
-[class*="info_bar"],
-[class*="details-bar"],
-[class*="DetailsBar"] {
-  background-color: #13151d !important;
-  color: #d0d4e0 !important;
-}
-
-/* ============================================
-   CHAT: Author/nickname visibility fix
-   ============================================ */
-
-/* The author header in chat messages */
+  backdrop-filter: blur(10px) !important; -webkit-backdrop-filter: blur(10px) !important;
+}
+.ui.segment .header, .ui.segment h3, .ui.segment h4,
+.header.layout, .header.layout.icon, .header.layout.icon.sectioned,
+.ui.segment .header.layout, .ui.segment .header.layout span,
+.ui.segment .header.layout .text { color: #d0d4e0 !important; }
+.ui.attached.segment, .ui.top.attached.segment, .ui.bottom.attached.segment { background-color: rgba(24, 26, 34, 0.85) !important; border-color: rgba(42, 46, 62, 0.6) !important; }
+.ui.basic.segment { background-color: transparent !important; }
+
+/* === HEADINGS === */
+h1, h2, h3, h4, h5, h6, .ui.header, .ui.header .content, .ui.sub.header { color: #d0d4e0 !important; }
+.ui.dividing.header { border-bottom-color: #2a2e3e !important; }
+
+/* === LINKS (no !important to preserve dupe/share colors) === */
+a, a:link { color: #4a9eff; }
+a:hover { color: #6db3ff; }
+a:visited { color: #7c8aff; }
+
+/* === TABLES === */
+.ui.table { background-color: #181a22 !important; color: #d0d4e0 !important; border: 1px solid #2a2e3e !important; }
+.ui.table thead th { background-color: #1e2130 !important; color: #8890a4 !important; border-bottom: 1px solid #2a2e3e !important; }
+.ui.table tbody tr { background-color: #181a22 !important; }
+.ui.table tbody tr:nth-child(even) { background-color: #1c1e28 !important; }
+.ui.table tbody tr:hover { background-color: #262a3a !important; }
+.ui.table td { color: #d0d4e0 !important; border-top: 1px solid #222536 !important; }
+.ui.table tfoot th { background-color: #1e2130 !important; border-top: 1px solid #2a2e3e !important; }
+.ui.sortable.table thead th { background-color: #1e2130 !important; color: #8890a4 !important; }
+.ui.sortable.table thead th:hover { background-color: #262a3a !important; color: #d0d4e0 !important; }
+
+/* === FORMS / INPUTS === */
+.ui.input input, .ui.form input, .ui.form textarea, .ui.form select,
+input, textarea, select {
+  background-color: #1e2130 !important; color: #d0d4e0 !important;
+  border: 1px solid #2a2e3e !important; -webkit-text-fill-color: #d0d4e0 !important;
+}
+.ui.input input:focus, .ui.form input:focus, .ui.form textarea:focus, input:focus, textarea:focus {
+  background-color: #222536 !important; border-color: #4a9eff !important;
+  color: #d0d4e0 !important; -webkit-text-fill-color: #d0d4e0 !important;
+}
+input::placeholder, textarea::placeholder { color: #5a6178 !important; -webkit-text-fill-color: #5a6178 !important; }
+input:-webkit-autofill, input:-webkit-autofill:hover, input:-webkit-autofill:focus, textarea:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #1e2130 inset !important;
+  -webkit-text-fill-color: #d0d4e0 !important; transition: background-color 5000s ease-in-out 0s;
+}
+input::selection, textarea::selection { background-color: #264f78 !important; color: #ffffff !important; }
+input::-moz-selection, textarea::-moz-selection { background-color: #264f78 !important; color: #ffffff !important; }
+.message-composer input, .message-composer textarea, [class*="composer"] input,
+[class*="composer"] textarea, [role="presentation"] input, [role="presentation"] textarea {
+  background-color: #1e2130 !important; color: #d0d4e0 !important; -webkit-text-fill-color: #d0d4e0 !important;
+}
+
+/* === BUTTONS === */
+.ui.button { background-color: #262a3a !important; color: #d0d4e0 !important; border: 1px solid #2a2e3e !important; }
+.ui.button:hover { background-color: #2d3348 !important; color: #ffffff !important; }
+.ui.primary.button { background-color: #4a9eff !important; color: #0f1117 !important; border: none !important; }
+.ui.primary.button:hover { background-color: #6db3ff !important; }
+.ui.positive.button, .ui.green.button { background-color: #48c78e !important; color: #0f1117 !important; }
+.ui.negative.button, .ui.red.button { background-color: #f14668 !important; color: #ffffff !important; }
+
+/* === DROPDOWNS === */
+.ui.dropdown .menu, .ui.selection.dropdown .menu { background-color: #1e2130 !important; border-color: #2a2e3e !important; }
+.ui.dropdown .menu > .item { color: #d0d4e0 !important; }
+.ui.dropdown .menu > .item:hover, .ui.dropdown .menu .active.item { background-color: #262a3a !important; color: #ffffff !important; }
+.ui.selection.dropdown { background-color: #1e2130 !important; color: #d0d4e0 !important; border-color: #2a2e3e !important; }
+.ui.dropdown > .text { color: #d0d4e0 !important; }
+.ui.dropdown .menu > .divider { border-top-color: #2a2e3e !important; }
+.ui.dropdown .menu > .header { color: #8890a4 !important; }
+
+/* === MODALS / POPUPS === */
+.ui.modal, .ui.modal > .content, .ui.modal > .header, .ui.modal > .actions {
+  background-color: #181a22 !important; color: #d0d4e0 !important; border-color: #2a2e3e !important;
+}
+.ui.dimmer { background-color: rgba(0, 0, 0, 0.75) !important; }
+.ui.popup { background-color: #1e2130 !important; color: #d0d4e0 !important; border: 1px solid #2a2e3e !important; }
+.ui.popup::before { background-color: #1e2130 !important; border-color: #2a2e3e !important; }
+
+/* === LABELS === */
+.ui.label { background-color: #262a3a !important; color: #d0d4e0 !important; border: 1px solid #2a2e3e !important; }
+.ui.blue.label { background-color: #4a9eff !important; color: #0f1117 !important; }
+.ui.green.label { background-color: #48c78e !important; color: #0f1117 !important; }
+.ui.red.label { background-color: #f14668 !important; color: #ffffff !important; }
+.ui.orange.label, .ui.yellow.label { background-color: #f0a020 !important; color: #0f1117 !important; }
+.ui.label.circular, .ui.floating.label { color: #ffffff !important; }
+
+/* === MESSAGES === */
+.ui.message { background-color: #1e2130 !important; color: #d0d4e0 !important; border: 1px solid #2a2e3e !important; }
+.ui.info.message { background-color: #182538 !important; border-color: #2a4a6e !important; }
+.ui.success.message, .ui.positive.message { background-color: #1a2e24 !important; border-color: #2a5e3e !important; }
+.ui.error.message, .ui.negative.message { background-color: #2e1a1e !important; border-color: #5e2a3e !important; }
+.ui.warning.message { background-color: #2e2a1a !important; border-color: #5e4a2a !important; }
+
+/* === TABS === */
+.ui.tabular.menu { border-bottom-color: #2a2e3e !important; }
+.ui.tabular.menu .item { background-color: transparent !important; color: #8890a4 !important; }
+.ui.tabular.menu .active.item { background-color: #181a22 !important; color: #d0d4e0 !important; border-color: #2a2e3e !important; border-bottom-color: #181a22 !important; }
+
+/* === MISC UI === */
+.ui.progress { background-color: #1e2130 !important; }
+.ui.progress .bar { background-color: #4a9eff !important; }
+.ui.loader:after { border-color: #4a9eff transparent transparent !important; }
+.ui.sidebar, .ui.left.sidebar, .ui.right.sidebar { background-color: #13151d !important; border-color: #2a2e3e !important; }
+.ui.divider { border-color: #2a2e3e !important; color: #8890a4 !important; }
+hr { border-color: #2a2e3e !important; }
+i.icon { color: #b0b8cc !important; }
+.ui.statistic > .value { color: #d0d4e0 !important; }
+.ui.statistic > .label { color: #8890a4 !important; }
+.ui.list .item, .ui.list .item .header { color: #d0d4e0 !important; }
+.ui.list .item .description { color: #8890a4 !important; }
+.ui.divided.list .item { border-top-color: #2a2e3e !important; }
+.ui.card, .ui.cards > .card { background-color: #181a22 !important; border: 1px solid #2a2e3e !important; }
+.ui.card > .content { border-top-color: #2a2e3e !important; }
+.ui.card > .content > .header { color: #d0d4e0 !important; }
+.ui.card > .content > .description { color: #8890a4 !important; }
+.ui.accordion .title, .ui.accordion .content { color: #d0d4e0 !important; }
+.ui.breadcrumb { color: #8890a4 !important; }
+.ui.breadcrumb a { color: #4a9eff !important; }
+.ui.pagination.menu .item { background-color: #1e2130 !important; color: #d0d4e0 !important; }
+.ui.pagination.menu .active.item { background-color: #4a9eff !important; color: #0f1117 !important; }
+.ui.checkbox label, .ui.radio.checkbox label { color: #d0d4e0 !important; }
+.ui.checkbox input:checked ~ label:before { background-color: #4a9eff !important; border-color: #4a9eff !important; }
+.ui.toggle.checkbox label:before { background-color: #2a2e3e !important; }
+.ui.toggle.checkbox input:checked ~ label:before { background-color: #48c78e !important; }
+
+/* === SCROLLBARS === */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: #0f1117; }
+::-webkit-scrollbar-thumb { background: #2a2e3e; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #3a3f52; }
+
+/* === CANVAS === */
+canvas { background-color: #0f1117 !important; opacity: 0.9; }
+
+/* === MISC === */
+code, pre { background-color: #1e2130 !important; border-color: #2a2e3e !important; }
+[data-tooltip]:after { background-color: #1e2130 !important; color: #d0d4e0 !important; border: 1px solid #2a2e3e !important; }
+[data-tooltip]:before { background-color: #1e2130 !important; }
+.ui.placeholder.segment { background-color: #13151d !important; border: 2px dashed #2a2e3e !important; }
+.date, .meta, time { color: #5a6178 !important; }
+
+/* === SECONDARY POINTING MENU === */
+.ui.secondary.pointing.menu { border-bottom-color: #2a2e3e !important; background-color: transparent !important; }
+.ui.secondary.pointing.menu .item { border-bottom-color: transparent !important; color: #8890a4 !important; background-color: transparent !important; }
+.ui.secondary.pointing.menu .active.item { border-bottom-color: #4a9eff !important; color: #4a9eff !important; background-color: transparent !important; }
+.ui.grid, .ui.grid > .row, .ui.grid > .column, .ui.grid > .row > .column { background-color: transparent !important; }
+.ui.items > .item { border-bottom: 1px solid #1e2130 !important; color: #d0d4e0 !important; }
+.ui.items > .item:hover { background-color: #181a22 !important; }
+.ui.feed, .ui.feed > .event { color: #d0d4e0 !important; background-color: transparent !important; }
+.ui.feed > .event { border-bottom: 1px solid #1e2130 !important; }
+
+/* ============================================================
+   AIRDCPP-SPECIFIC (targeted fixes only, no global catch-alls)
+   ============================================================ */
+
+/* Right sidebar icons */
+#side-menu { background-color: #13151d !important; border-left: 1px solid #2a2e3e !important; }
+#side-menu i.icon, .ui.vertical.icon.menu i.icon { color: #c0c8dc !important; }
+#side-menu .item:hover i.icon { color: #ffffff !important; }
+#side-menu .item.active i.icon { color: #4a9eff !important; }
+#side-menu .item, #side-menu .item span { color: #b0b8cc !important; }
+
+/* Session content panel */
+#session-content-panel { background-color: rgba(15, 17, 23, 0.9) !important; color: #d0d4e0 !important; }
+
+/* Sidebar/session containers */
+#sidebar-container, #sidebar, .session-container, .session-container.horizontal { background-color: #13151d !important; }
+.menu-column, nav.menu-column, nav[aria-label="session items"] { background-color: #13151d !important; border-right: 1px solid #2a2e3e !important; }
+.menu-column .item, nav.menu-column .item { background-color: transparent !important; color: #d0d4e0 !important; border-bottom: 1px solid #1e2130 !important; }
+.menu-column .item:hover { background-color: #1e2130 !important; }
+.menu-column .item.active { background-color: #1e2130 !important; color: #4a9eff !important; }
+
+/* Footer / status bar */
+footer, .footer, .table-footer, [class*="footer"] {
+  background-color: #13151d !important; background-image: none !important;
+  color: #d0d4e0 !important; border-top: 1px solid #2a2e3e !important;
+}
+.ui.bottom.attached.segment, .ui.bottom.attached.menu, .ui.bottom.segment, .ui.bottom.menu, .ui.attached.menu {
+  background-color: #13151d !important; border-color: #2a2e3e !important; color: #d0d4e0 !important;
+}
+[class*="filter"] { background-color: #13151d !important; color: #d0d4e0 !important; }
+
+/* Events page */
+[class*="event"] { color: #d0d4e0 !important; }
+
+/* Chat nicknames */
+.header.author, .chat.item .author, .chat.session .chat.item .author { color: #4a9eff !important; }
+.header.author .ui.dropdown, .header.author .user-menu,
+.chat.item .author .ui.dropdown, .chat.item .author .ui.dropdown .text,
+.chat.item .author a, .chat.item .header a { color: #4a9eff !important; }
+.chat.item.ccpm .header.author, .chat.item.ccpm .header.author .ui.dropdown,
+.chat.item.ccpm .header.author .ui.dropdown.item.user-menu { color: #48c78e !important; }
+.chat.item.asch.self .header.author, .chat.item.asch.self .header.author .ui.dropdown,
+.chat.item.asch.self .header.author .ui.dropdown.item.user-menu { color: #f0a020 !important; }
+.header.author [role="menuitem"], .header.author [aria-haspopup], .header.author [tabindex] { color: #4a9eff !important; }
+.chat.item.asch.self .header.author [role="menuitem"], .chat.item.asch.self .header.author [aria-haspopup] { color: #f0a020 !important; }
+
+/* Make nicknames selectable when highlighting text */
 .header.author,
-div.header.author,
-.chat.item .author,
-.chat.session .chat.item .author,
-.chat.item .header.author {
-  color: #4a9eff !important;
-}
-
-/* The dropdown inside the author (the actual nickname text) */
 .header.author .ui.dropdown,
-.header.author .ui.dropdown .text,
-.header.author .user-menu,
 .header.author .ui.dropdown.item.user-menu,
-.chat.item .author .ui.dropdown,
-.chat.item .author .ui.dropdown .text,
-.chat.item .author a,
-.chat.item .header a {
-  color: #4a9eff !important;
+.header.author .caption,
+.header.author div.caption,
+.header.author div.caption[role="button"],
+.ui.dropdown:not(.button) > .caption {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  user-select: text !important;
+  overflow: visible !important;
 }
 
-/* Brute force: any dropdown item inside a chat author must be visible */
-.ui.list .item .header.author .ui.dropdown.item,
-.ui.list .chat.item .header.author .ui.dropdown.item,
-div.header.author div.ui.dropdown.item,
-div.header.author div.ui.dropdown.item.user-menu,
-.message-section .chat.item .header.author .ui.dropdown,
-.message-section .chat.item .header.author .ui.dropdown.item,
-[role="article"] .header.author .ui.dropdown,
-[role="article"] .header.author .ui.dropdown.item {
-  color: #4a9eff !important;
-}
-
-/* Different color for other users vs yourself */
-.chat.item.ccpm .header.author,
-.chat.item.ccpm .header.author .ui.dropdown,
-.chat.item.ccpm .header.author .ui.dropdown .text,
-.chat.item.ccpm .header.author .ui.dropdown.item,
-.chat.item.ccpm .header.author .ui.dropdown.item.user-menu {
-  color: #48c78e !important;
-}
-
-/* Self messages — "asch self" class */
-.chat.item.asch.self .header.author,
-.chat.item.asch.self .header.author .ui.dropdown,
-.chat.item.asch.self .header.author .ui.dropdown .text,
-.chat.item.asch.self .header.author .ui.dropdown.item,
-.chat.item.asch.self .header.author .ui.dropdown.item.user-menu {
-  color: #f0a020 !important;
-}
-
-/* Nuclear: any element with role="menuitem" inside .header.author */
-.header.author [role="menuitem"],
-.header.author [aria-haspopup],
-.header.author [tabindex] {
-  color: #4a9eff !important;
-}
-
-.chat.item.asch.self .header.author [role="menuitem"],
-.chat.item.asch.self .header.author [aria-haspopup],
-.chat.item.asch.self .header.author [tabindex] {
-  color: #f0a020 !important;
-}
-
-/* Fix nickname caption — app's chat.css sets .caption to black !important
-   Prefixed with body to guarantee higher specificity than app styles */
-body .caption,
-body div.caption,
-body div.caption[role="button"],
+/* Caption fix (app sets .caption black !important) */
+body .caption, body div.caption, body div.caption[role="button"],
 body .header.author .caption,
-body .chat.item .header.author .caption,
 body .chat.session .chat.item .author .caption,
 body .chat.session .chat.item.self .author .caption,
-body .chat.session .chat.item .header.author .caption,
-body .chat.session .chat.item.self .header.author .caption,
 body .private.chat.session .chat.item .author .caption,
 body .private.chat.session .chat.item.self .author .caption,
-body .ui.dropdown .caption,
-body .ui.dropdown.item.user-menu .caption,
-body .ui.dropdown.item.user-menu div.caption {
-  color: #4a9eff !important;
-}
-
+body .ui.dropdown .caption, body .ui.dropdown.item.user-menu .caption { color: #4a9eff !important; }
 body .chat.item.asch.self .header.author .caption,
 body .chat.session .chat.item.asch.self .author .caption,
-body .chat.session .chat.item.asch.self .header.author .caption,
-body .chat.session .chat.item.ccpm.asch.self .author .caption,
-body .private.chat.session .chat.item.asch.self .author .caption {
-  color: #f0a020 !important;
-}
-
+body .private.chat.session .chat.item.asch.self .author .caption { color: #f0a020 !important; }
 body .chat.item.ccpm .header.author .caption,
 body .chat.session .chat.item.ccpm .author .caption,
-body .chat.session .chat.item.ccpm .header.author .caption,
-body .private.chat.session .chat.item.ccpm .author .caption {
-  color: #48c78e !important;
+body .private.chat.session .chat.item.ccpm .author .caption { color: #48c78e !important; }
+
+/* Chat text */
+.chat.item .text, .chat.item div.text, .message-section.chat div.text { color: #d0d4e0 !important; }
+.chat.item .time, .chat.item time { color: #5a6178 !important; }
+
+/* High-specificity dropdown menus */
+.ui.dropdown .menu, .ui.dropdown .menu.visible, .ui.dropdown .menu.transition,
+.ui.pointing.dropdown > .menu, div.ui.dropdown .menu, .ui.simple.dropdown .menu {
+  background-color: #181a22 !important; border: 1px solid #2a2e3e !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
 }
-
-/* Chat message text */
-.chat.item .text,
-.chat.item div.text,
-.message-section.chat div.text {
-  color: #d0d4e0 !important;
-}
-
-/* Chat timestamps */
-.chat.item .time,
-.chat.item time {
-  color: #5a6178 !important;
-}
-
-/* ============================================
-   LOGIN PAGE
-   ============================================ */
-
-/* Login form container — solid dark card (only the inner box) */
-form[name="login"] .ui.segment,
-form[name="login"] .ui.stacked.segment,
-form.ui.large.form .ui.stacked.segment {
-  background-color: #181a22 !important;
-  border: 1px solid #2a2e3e !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
-}
-
-/* Login page outer grid — transparent so background image shows */
-.login-grid,
-[class*="login-grid"],
-.ui.middle.aligned.center.aligned.grid.login-grid,
-.ui.middle.aligned.center.aligned.grid.login-grid .column {
-  background-color: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-/* Login input fields — lighter so they stand out from the card */
-.ui.form .field input,
-.ui.form.segment input,
-[class*="login"] input,
-[class*="Login"] input {
-  background-color: rgba(30, 33, 48, 0.7) !important;
-  color: #d0d4e0 !important;
-  border: 1px solid #3a3f52 !important;
-}
-
-.ui.form .field input:focus,
-.ui.form.segment input:focus,
-[class*="login"] input:focus,
-[class*="Login"] input:focus {
-  background-color: rgba(34, 37, 54, 0.9) !important;
-  border-color: #4a9eff !important;
-}
-
-/* Login input placeholder text */
-.ui.form .field input::placeholder {
-  color: #8890a4 !important;
-}
-
-/* Login input icons */
-.ui.form .field .icon,
-.ui.icon.input > i.icon {
-  color: #8890a4 !important;
-}
-
-/* Login button */
-.ui.form .ui.button,
-.ui.form.segment .ui.button,
-[class*="login"] .ui.button,
-[class*="Login"] .ui.button {
-  background-color: #4a9eff !important;
-  color: #0f1117 !important;
-  font-weight: 700 !important;
-}
-
-.ui.form .ui.button:hover,
-[class*="login"] .ui.button:hover {
-  background-color: #6db3ff !important;
-}
-
-/* "Keep me logged in" checkbox label */
-.ui.form .field .ui.checkbox label,
-.ui.form.segment .ui.checkbox label {
-  color: #d0d4e0 !important;
-}
-
-/* ============================================
-   HUB ACTION DROPDOWN / CONTEXT POPUP (mobile)
-   ============================================ */
-
-/* High specificity override for .ui.menu .ui.dropdown .menu > .item */
+.ui.dropdown .menu > .item, .ui.dropdown .menu > a.item { color: #d0d4e0 !important; background-color: transparent !important; }
+.ui.dropdown .menu > .item:hover, .ui.dropdown .menu > a.item:hover { background-color: #262a3a !important; color: #ffffff !important; }
+.ui.dropdown .menu > .item i.icon { color: #8890a4 !important; }
+.ui.dropdown .menu > .item:hover i.icon { color: #d0d4e0 !important; }
 body .ui.menu .ui.dropdown .menu > .item,
-body .ui.menu .ui.dropdown .menu > .item.link,
 body .ui.menu .ui.dropdown .menu > a.item,
 body .ui.menu .ui.dropdown .menu > div.item,
 body .ui.menu .ui.dropdown .menu > .item span,
 body .ui.menu .ui.dropdown .menu > .item .name,
-body .ui.menu .ui.dropdown .menu > .item .text,
-body .ui.menu .ui.dropdown .menu > a.item span {
-  color: #d0d4e0 !important;
-}
-
+body .ui.menu .ui.dropdown .menu > .item .text { color: #d0d4e0 !important; }
 body .ui.menu .ui.dropdown .menu > .item:hover,
-body .ui.menu .ui.dropdown .menu > .item.link:hover,
 body .ui.menu .ui.dropdown .menu > a.item:hover,
-body .ui.menu .ui.dropdown .menu > .item:focus,
-body .ui.menu .ui.dropdown .menu > .item.active,
-body .ui.menu .ui.dropdown .menu > .item.selected,
-body .ui.menu .ui.dropdown .menu > div.item:hover,
-body .ui.menu .ui.dropdown .menu > .item:hover span,
-body .ui.menu .ui.dropdown .menu > a.item:hover span {
-  color: #ffffff !important;
-  background-color: #262a3a !important;
+body .ui.menu .ui.dropdown .menu > .item:hover span { color: #ffffff !important; background-color: #262a3a !important; }
+body .ui.menu .ui.dropdown .menu > .item i.icon { color: #8890a4 !important; }
+body .ui.menu .ui.dropdown .menu > .item:hover i.icon { color: #d0d4e0 !important; }
+body .ui.menu .ui.dropdown .menu { background-color: #181a22 !important; border: 1px solid #2a2e3e !important; }
+.ui.menu .ui.dropdown .menu > .ui.divider, .ui.menu .ui.dropdown .menu > .divider { border-color: #2a2e3e !important; }
+
+/* Toastify */
+.Toastify, .Toastify__toast-container, .Toastify__toast, .Toastify__toast-body,
+.Toastify__toast--default, .Toastify__toast--info, .Toastify__toast--success,
+.Toastify__toast--warning, .Toastify__toast--error {
+  background-color: #181a22 !important; color: #d0d4e0 !important;
+  border: 1px solid #2a2e3e !important; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
 }
+.Toastify__close-button { color: #8890a4 !important; }
+.Toastify__progress-bar { background-color: #4a9eff !important; }
 
-body .ui.menu .ui.dropdown .menu > .item i.icon {
-  color: #8890a4 !important;
-}
-
-body .ui.menu .ui.dropdown .menu > .item:hover i.icon,
-body .ui.menu .ui.dropdown .menu > .item.active i.icon,
-body .ui.menu .ui.dropdown .menu > .item.selected i.icon {
-  color: #d0d4e0 !important;
-}
-
-/* The dropdown menu background inside a menu */
-body .ui.menu .ui.dropdown .menu {
-  background-color: #181a22 !important;
-  border: 1px solid #2a2e3e !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
-}
-}
-
-/* Dividers inside menu dropdowns */
-.ui.menu .ui.dropdown .menu > .ui.divider,
-.ui.menu .ui.dropdown .menu > .divider {
-  border-color: #2a2e3e !important;
-}
-
-/* ============================================
-   TOASTIFY NOTIFICATION POPUPS
-   ============================================ */
-
-.Toastify,
-.Toastify__toast-container,
-.Toastify__toast,
-.Toastify__toast-body,
-.Toastify__toast--default,
-.Toastify__toast--info,
-.Toastify__toast--success,
-.Toastify__toast--warning,
-.Toastify__toast--error {
-  background-color: #181a22 !important;
-  color: #d0d4e0 !important;
-  border: 1px solid #2a2e3e !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
-}
-
-.Toastify__close-button {
-  color: #8890a4 !important;
-}
-
-.Toastify__progress-bar {
-  background-color: #4a9eff !important;
-}
-
-/* ============================================
-   SETTINGS PAGE
-   ============================================ */
-
-/* Settings page container — solid dark background */
-body .ui.segment.settings-layout,
-body .ui.segment.settings-layout .full,
-body #setting-scroll-context,
-body #setting-scroll-context.ui.segment,
-body #settings-content-panel,
+/* Settings */
+body .ui.segment.settings-layout, body .ui.segment.settings-layout .full,
+body #setting-scroll-context, body #settings-content-panel,
 body .ui.secondary.pointing.menu.settings.top-menu,
-body .settings-layout,
-body .settings-layout .full,
-body .section-content {
-  background-color: #0f1117 !important;
+body .settings-layout, body .section-content { background-color: #0f1117 !important; }
+body .three.wide.column.menu-column { background-color: #13151d !important; }
+body #settings-content-panel > .ui.segment, body #settings-content-panel .ui.segment { background-color: #181a22 !important; }
+body .ui.secondary.pointing.menu .item, body .ui.tabular.menu .item { color: #8890a4 !important; }
+body .ui.secondary.pointing.menu .item:hover, body .ui.tabular.menu .item:hover { color: #d0d4e0 !important; }
+body .ui.secondary.pointing.menu .item.active, body .ui.tabular.menu .item.active { color: #4a9eff !important; border-color: #4a9eff !important; }
+body .ui.vertical.menu .item, body .ui.vertical.pointing.menu .item { color: #8890a4 !important; background-color: transparent !important; }
+body .ui.vertical.menu .item:hover { color: #d0d4e0 !important; background-color: #1e2130 !important; }
+body .ui.vertical.menu .item.active { color: #4a9eff !important; background-color: #1e2130 !important; }
+body .ui.vertical.menu .item .header { color: #d0d4e0 !important; }
+body .ui.form .field > label, body .ui.form label, body label { color: #d0d4e0 !important; }
+body .ui.segment .meta, body .ui.segment .description { color: #8890a4 !important; }
+
+/* Login */
+form[name="login"] .ui.segment, form[name="login"] .ui.stacked.segment, form.ui.large.form .ui.stacked.segment {
+  background-color: #181a22 !important; border: 1px solid #2a2e3e !important; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
 }
+.login-grid, .ui.middle.aligned.center.aligned.grid.login-grid,
+.ui.middle.aligned.center.aligned.grid.login-grid .column { background-color: transparent !important; border: none !important; box-shadow: none !important; }
+.ui.form .field .icon, .ui.icon.input > i.icon { color: #8890a4 !important; }
+.ui.form .ui.button { background-color: #4a9eff !important; color: #0f1117 !important; font-weight: 700 !important; }
+.ui.form .ui.button:hover { background-color: #6db3ff !important; }
+.ui.form .field .ui.checkbox label { color: #d0d4e0 !important; }
 
-/* Settings left sidebar */
-body .menu-column,
-body .three.wide.column.menu-column,
-body #setting-scroll-context .menu-column {
-  background-color: #13151d !important;
-}
+/* Dupe/share colors */
+.dupe, .dupe .caption, .dupe .file-name, .dupe .icon-caption, .dupe .popup.trigger,
+.cell-wrapper.dupe, .cell-wrapper.dupe .caption, .cell-wrapper.dupe .file-name,
+.cell-wrapper.name.dupe .caption, .cell-wrapper.name.dupe .file-name,
+.cell-wrapper.name.dupe.share .caption, .cell-wrapper.name.dupe.share .file-name,
+.cell-wrapper.name.dupe.share.full .caption, .cell-wrapper.name.dupe.share.full .file-name { color: #cc66ff !important; }
+.cell-wrapper.name.download .caption, .cell-wrapper.name.download .file-name { color: #48c78e !important; }
 
-/* Settings content panel inner segment */
-body #settings-content-panel > .ui.segment,
-body .section-content.profile > .ui.segment,
-body #settings-content-panel .ui.segment {
-  background-color: #181a22 !important;
-}
-
-/* Settings tab bar (Profile, Connectivity, Downloads, etc.) */
-body .ui.secondary.pointing.menu .item,
-body .ui.secondary.pointing.menu a.item,
-body .ui.tabular.menu .item,
-body .ui.tabular.menu a.item {
-  color: #8890a4 !important;
-}
-
-body .ui.secondary.pointing.menu .item:hover,
-body .ui.secondary.pointing.menu a.item:hover,
-body .ui.tabular.menu .item:hover,
-body .ui.tabular.menu a.item:hover {
-  color: #d0d4e0 !important;
-}
-
-body .ui.secondary.pointing.menu .item.active,
-body .ui.secondary.pointing.menu a.item.active,
-body .ui.tabular.menu .item.active,
-body .ui.tabular.menu a.item.active {
-  color: #4a9eff !important;
-  border-color: #4a9eff !important;
-}
-
-/* Settings left sidebar menu */
-body .ui.vertical.menu .item,
-body .ui.vertical.menu a.item,
-body .ui.vertical.menu .item .header,
-body .ui.vertical.pointing.menu .item,
-body .ui.vertical.pointing.menu a.item {
-  color: #8890a4 !important;
-  background-color: transparent !important;
-}
-
-body .ui.vertical.menu .item:hover,
-body .ui.vertical.menu a.item:hover,
-body .ui.vertical.pointing.menu .item:hover,
-body .ui.vertical.pointing.menu a.item:hover {
-  color: #d0d4e0 !important;
-  background-color: #1e2130 !important;
-}
-
-body .ui.vertical.menu .item.active,
-body .ui.vertical.menu a.item.active,
-body .ui.vertical.pointing.menu .item.active,
-body .ui.vertical.pointing.menu a.item.active {
-  color: #4a9eff !important;
-  background-color: #1e2130 !important;
-}
-
-/* Settings section headers (e.g. "Advanced") */
-body .ui.vertical.menu .item .header,
-body .ui.vertical.menu .header {
-  color: #d0d4e0 !important;
-}
-
-/* Form labels in settings */
-body .ui.form .field > label,
-body .ui.form label,
-body label {
-  color: #d0d4e0 !important;
-}
-
-/* "No unsaved changes" and similar status text */
-body .ui.segment .meta,
-body .ui.segment .description {
-  color: #8890a4 !important;
-}
-
-/* ============================================
-   SEARCH RESULTS: Preserve dupe/share colors
-   ============================================ */
-
-/* Let the app's dupe/share colors show through */
-.dupe,
-.dupe .caption,
-.dupe .file-name,
-.dupe .icon-caption,
-.dupe .popup.trigger,
-.cell-wrapper.dupe,
-.cell-wrapper.dupe .caption,
-.cell-wrapper.dupe .file-name,
-.cell-wrapper.dupe .icon-caption,
-.cell-wrapper.dupe .popup.trigger,
-.cell-wrapper.name.dupe .caption,
-.cell-wrapper.name.dupe .file-name,
-.cell-wrapper.name.dupe.share .caption,
-.cell-wrapper.name.dupe.share .file-name,
-.cell-wrapper.name.dupe.share.full .caption,
-.cell-wrapper.name.dupe.share.full .file-name {
-  color: #cc66ff !important;
-}
-
-/* Partial dupe */
-.cell-wrapper.name.dupe.share:not(.full) .caption,
-.cell-wrapper.name.dupe.share:not(.full) .file-name,
-.cell-wrapper.name.dupe:not(.share) .caption,
-.cell-wrapper.name.dupe:not(.share) .file-name {
-  color: #cc66ff !important;
-}
-
-/* Download/queued state */
-.cell-wrapper.name.download .caption,
-.cell-wrapper.name.download .file-name {
-  color: #48c78e !important;
-}
-
-/* ============================================
-   FIXEDDATATABLE (Queue, Search, Transfers, etc.)
-   ============================================ */
-
-/* Table background */
-.fixedDataTableLayout_main,
-.fixedDataTableLayout_rowsContainer,
-.fixedDataTableRowLayout_body,
-.fixedDataTableRowLayout_main,
-.fixedDataTableCellLayout_main,
-.public_fixedDataTable_main,
-.public_fixedDataTable_bodyRow,
-.public_fixedDataTableCell_main,
+/* FixedDataTable */
+.fixedDataTableLayout_main, .fixedDataTableLayout_rowsContainer,
+.fixedDataTableRowLayout_body, .fixedDataTableRowLayout_main,
+.fixedDataTableCellLayout_main, .public_fixedDataTable_main,
+.public_fixedDataTable_bodyRow, .public_fixedDataTableCell_main,
 .public_fixedDataTableRow_main,
-[class*="fixedDataTable"],
-[class*="fixedDataTableRow"],
-[class*="fixedDataTableCell"] {
-  background-color: #0f1117 !important;
-  color: #d0d4e0 !important;
+[class*="fixedDataTable"], [class*="fixedDataTableRow"], [class*="fixedDataTableCell"] {
+  background-color: #0f1117 !important; color: #d0d4e0 !important;
 }
-
-/* Table header */
-[role="columnheader"],
-.fixedDataTableCellLayout_main[role="columnheader"],
-.public_fixedDataTableCell_main[role="columnheader"],
-[class*="fixedDataTable"] [role="columnheader"] {
-  background-color: #1e2130 !important;
-  color: #8890a4 !important;
-}
-
-/* Header text/links */
-[role="columnheader"] a,
-[role="columnheader"] .button.link,
-[role="columnheader"] a.button.link,
-[role="columnheader"] span,
-[role="columnheader"] div {
-  color: #8890a4 !important;
-}
-
-[role="columnheader"]:hover a,
-[role="columnheader"]:hover .button.link {
-  color: #d0d4e0 !important;
-}
-
-/* Cell content */
+[role="columnheader"] { background-color: #1e2130 !important; color: #8890a4 !important; border-right: 1px solid #2a2e3e !important; border-bottom: 1px solid #3a3f52 !important; }
+[role="columnheader"] a, [role="columnheader"] .button.link, [role="columnheader"] span, [role="columnheader"] div { color: #8890a4 !important; }
+[role="columnheader"]:hover a, [role="columnheader"]:hover .button.link { color: #d0d4e0 !important; }
 .public_fixedDataTableCell_cellContent,
-[class*="fixedDataTableCell"] div,
-[class*="fixedDataTableCell"] span,
-[class*="fixedDataTableCell"] a {
+[class*="fixedDataTableCell"] div, [class*="fixedDataTableCell"] span, [class*="fixedDataTableCell"] a { color: #d0d4e0 !important; }
+.cell-wrapper, .cell-wrapper span, .cell-wrapper div, .cell-wrapper a { color: #d0d4e0 !important; }
+.public_fixedDataTableRow_highlighted, .public_fixedDataTableRow_main:hover,
+[class*="fixedDataTableRow"]:hover [class*="fixedDataTableCell"] { background-color: #1e2130 !important; }
+.public_fixedDataTableRow_main, [class*="fixedDataTableRow_main"] { border-bottom: 1px solid #2a2e3e !important; }
+.fixedDataTableCellLayout_main, .public_fixedDataTableCell_main, [class*="fixedDataTableCell_main"] { border-right: 1px solid #2a2e3e !important; border-bottom: 1px solid #2a2e3e !important; }
+.fixedDataTableLayout_main, .public_fixedDataTable_main, [class*="fixedDataTable_main"] { border: 1px solid #2a2e3e !important; }
+.cell-wrapper.dupe .caption, .cell-wrapper.dupe .file-name, .cell-wrapper.dupe .icon-caption,
+.cell-wrapper.name.dupe a, .cell-wrapper.name.dupe span,
+.cell-wrapper.name.dupe.share a, .cell-wrapper.name.dupe.share span,
+.cell-wrapper.name.dupe.share.full a, .cell-wrapper.name.dupe.share.full span { color: #cc66ff !important; }
+.cell-wrapper.download a, .cell-wrapper.download span { color: #48c78e !important; }
+
+/* === Events page === */
+.message-section.events,
+.message-section.events[role="article"],
+.layout-content.system-log,
+.simple-layout,
+.simple-layout .wrapper,
+.simple-layout .layout-content {
+  background-color: #0f1117 !important;
   color: #d0d4e0 !important;
 }
 
-/* Cell wrapper text */
-.cell-wrapper,
-.cell-wrapper span,
-.cell-wrapper div,
-.cell-wrapper a {
-  color: #d0d4e0 !important;
+/* === Filter/search inputs (Filelists, Messages — react-select) === */
+/* The outermost react-select container */
+.css-b62m3t-container,
+[class*="css-"][class*="container"] {
+  background-color: transparent !important;
+  border: none !important;
 }
-
-/* Row hover */
-.public_fixedDataTableRow_highlighted,
-.public_fixedDataTableRow_main:hover,
-[class*="fixedDataTableRow"]:hover [class*="fixedDataTableCell"] {
+/* The control bar (the visible input area) */
+[class*="css-"][class*="control"] {
   background-color: #1e2130 !important;
+  border-color: #2a2e3e !important;
+  color: #d0d4e0 !important;
+  min-height: auto !important;
+}
+/* Inner grid/value wrappers — must be transparent */
+[class*="css-hlgw"],
+[class*="css-19bb5b"],
+[class*="css-"][data-value] {
+  background-color: transparent !important;
+  background: transparent !important;
+}
+/* The actual input element inside react-select */
+[class*="css-"] input,
+[class*="css-"] input[role="combobox"],
+.session-new input,
+[id*="react-select"] {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #d0d4e0 !important;
+  -webkit-text-fill-color: #d0d4e0 !important;
+  border: none !important;
+  outline: none !important;
+}
+[class*="css-"][class*="placeholder"] { color: #5a6178 !important; }
+[class*="css-"][class*="singleValue"],
+[class*="css-"][class*="input"] { color: #d0d4e0 !important; }
+[class*="css-"][class*="menu"],
+[class*="css-"][class*="menuList"] { background-color: #1e2130 !important; color: #d0d4e0 !important; }
+[class*="css-"][class*="option"] { background-color: #1e2130 !important; color: #d0d4e0 !important; }
+[class*="css-"][class*="option"]:hover { background-color: #262a3a !important; }
+
+/* === Widget titles (card headers — app sets rgba(0,0,0,.87)) === */
+body .ui.cards > .card > .content > .header,
+body .ui.card > .content > .header,
+body .ui.cards > .card > .content > .header:not(.ui),
+body .content.header-row .header,
+body .content.header-row div.header,
+body .react-grid-layout .widget .header,
+body .react-grid-layout .widget .content.header-row .header,
+body .card.widget .header,
+body .card.widget .content .header,
+body .card.widget .content.header-row .header,
+body .card.widget .content.header-row div.header {
+  color: #d0d4e0 !important;
 }
 
-/* Row and cell borders — subtle grey */
-.public_fixedDataTableRow_main,
-[class*="fixedDataTableRow_main"] {
-  border-bottom: 1px solid #2a2e3e !important;
+/* === Bot/system message nicknames === */
+.chat.item.mndc .header.author,
+.chat.item.mndc .header.author .ui.dropdown,
+.chat.item.mndc.op .header.author,
+.chat.item.mndc.op .header.author .ui.dropdown,
+.chat.item.mndc.bot .header.author,
+.chat.item.mndc.bot .header.author .ui.dropdown {
+  color: #8890a4 !important;
 }
 
-/* Cell borders (vertical lines between columns) */
-.fixedDataTableCellLayout_main,
-.public_fixedDataTableCell_main,
-[class*="fixedDataTableCell_main"] {
-  border-right: 1px solid #2a2e3e !important;
-  border-bottom: 1px solid #2a2e3e !important;
+/* Ensure ALL chat captions are visible — must beat chat.css specificity */
+/* Default: blue */
+body .chat.session .chat.item .caption,
+body .chat.session .chat.item .header.author .caption,
+body .chat.session .chat.item div.caption,
+body .chat.session .chat.item div.caption[role="button"],
+body .private.chat.session .chat.item .caption,
+body .private.chat.session .chat.item .header.author .caption,
+body .private.chat.session .chat.item div.caption {
+  color: #4a9eff !important;
 }
-
-/* Header cell borders */
-[role="columnheader"],
-[role="columnheader"] .fixedDataTableCellLayout_main,
-[role="columnheader"] .public_fixedDataTableCell_main {
-  border-right: 1px solid #2a2e3e !important;
-  border-bottom: 1px solid #3a3f52 !important;
+/* Self messages: orange */
+body .chat.session .chat.item.self .caption,
+body .chat.session .chat.item.self .header.author .caption,
+body .chat.session .chat.item.self div.caption,
+body .chat.session .chat.item.asch.self .caption,
+body .chat.session .chat.item.asch.self .header.author .caption,
+body .chat.session .chat.item.asch.self div.caption,
+body .chat.session .chat.item.ccpm.asch.self .caption,
+body .chat.session .chat.item.ccpm.asch.self .header.author .caption,
+body .private.chat.session .chat.item.self .caption,
+body .private.chat.session .chat.item.asch.self .caption,
+body .private.chat.session .chat.item.asch.self .header.author .caption {
+  color: #f0a020 !important;
 }
-
-/* Outer table border */
-.fixedDataTableLayout_main,
-.public_fixedDataTable_main,
-[class*="fixedDataTable_main"] {
-  border: 1px solid #2a2e3e !important;
-}
-
-/* Preserve dupe/share colors in FixedDataTable cells */
-.cell-wrapper.dupe .caption,
-.cell-wrapper.dupe .file-name,
-.cell-wrapper.dupe .icon-caption,
-.cell-wrapper.name.dupe a,
-.cell-wrapper.name.dupe span,
-.cell-wrapper.name.dupe.share a,
-.cell-wrapper.name.dupe.share span,
-.cell-wrapper.name.dupe.share.full a,
-.cell-wrapper.name.dupe.share.full span {
-  color: #cc66ff !important;
-}
-
-/* Green for download/shared status text */
-.cell-wrapper.download a,
-.cell-wrapper.download span {
+/* Other users: green */
+body .chat.session .chat.item.ccpm .caption,
+body .chat.session .chat.item.ccpm .header.author .caption,
+body .chat.session .chat.item.ccpm div.caption,
+body .private.chat.session .chat.item.ccpm .caption,
+body .private.chat.session .chat.item.ccpm .header.author .caption,
+body .private.chat.session .chat.item.ccpm div.caption {
   color: #48c78e !important;
+}
+/* Bot/system: grey — must also beat chat.css .chat.session .chat.item.bot .caption */
+body .chat.session .chat.item.bot .caption,
+body .chat.session .chat.item.bot .header.author .caption,
+body .chat.session .chat.item.bot div.caption,
+body .chat.session .chat.item.mndc .caption,
+body .chat.session .chat.item.mndc .header.author .caption,
+body .chat.session .chat.item.mndc div.caption,
+body .chat.session .chat.item.mndc.op .caption,
+body .chat.session .chat.item.mndc.op .header.author .caption,
+body .chat.session .chat.item.mndc.op.bot .caption,
+body .chat.session .chat.item.mndc.op.bot .header.author .caption,
+body .private.chat.session .chat.item.bot .caption,
+body .private.chat.session .chat.item.mndc .caption,
+body .private.chat.session .chat.item.mndc.op.bot .caption {
+  color: #8890a4 !important;
 }
