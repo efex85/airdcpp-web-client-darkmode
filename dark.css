@@ -140,10 +140,53 @@ i.icon { color: #b0b8cc !important; }
 .ui.list .item, .ui.list .item .header { color: #d0d4e0 !important; }
 .ui.list .item .description { color: #8890a4 !important; }
 .ui.divided.list .item { border-top-color: #2a2e3e !important; }
-.ui.card, .ui.cards > .card { background-color: #181a22 !important; border: 1px solid #2a2e3e !important; }
-.ui.card > .content { border-top-color: #2a2e3e !important; }
+.ui.card, .ui.cards > .card { background-color: #181a22 !important; border: 1px solid rgba(42, 46, 62, 0.4) !important; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important; }
+.ui.cards { background-color: transparent !important; }
+.ui.card > .content { border-top-color: rgba(42, 46, 62, 0.4) !important; }
 .ui.card > .content > .header { color: #d0d4e0 !important; }
 .ui.card > .content > .description { color: #8890a4 !important; }
+/* Dashboard widget cards */
+.card.widget, .card.widget.react-grid-item, .react-grid-layout .card.widget {
+  background-color: rgba(24, 26, 34, 0.85) !important;
+  border: 1px solid rgba(42, 46, 62, 0.3) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+.react-grid-layout { background-color: transparent !important; }
+/* Widget content areas */
+.card.widget .main.content, .card.widget > .content {
+  background-color: transparent !important;
+}
+/* Transfer chart — ApexCharts dark overrides */
+.apexcharts-tooltip,
+.apexcharts-tooltip.apexcharts-theme-light,
+.apexcharts-tooltip.apexcharts-theme-dark {
+  background-color: #181a22 !important;
+  color: #d0d4e0 !important;
+  border: 1px solid #2a2e3e !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+}
+.apexcharts-tooltip .apexcharts-tooltip-title {
+  background-color: #1e2130 !important;
+  color: #d0d4e0 !important;
+  border-bottom: 1px solid #2a2e3e !important;
+}
+.apexcharts-tooltip .apexcharts-tooltip-text,
+.apexcharts-tooltip .apexcharts-tooltip-text-y-label,
+.apexcharts-tooltip .apexcharts-tooltip-text-y-value {
+  color: #d0d4e0 !important;
+}
+.apexcharts-xaxistooltip, .apexcharts-yaxistooltip {
+  background-color: #181a22 !important;
+  color: #d0d4e0 !important;
+  border: 1px solid #2a2e3e !important;
+}
+.apexcharts-xaxistooltip-bottom:after, .apexcharts-xaxistooltip-bottom:before {
+  border-bottom-color: #2a2e3e !important;
+}
+/* ApexCharts grid lines */
+.apexcharts-gridline { stroke: #2a2e3e !important; }
+.apexcharts-xaxis-tick { stroke: #2a2e3e !important; }
+.apexcharts-text, .apexcharts-yaxis-label, .apexcharts-xaxis-label { fill: #8890a4 !important; }
 .ui.accordion .title, .ui.accordion .content { color: #d0d4e0 !important; }
 .ui.breadcrumb { color: #8890a4 !important; }
 .ui.breadcrumb a { color: #4a9eff !important; }
@@ -225,20 +268,6 @@ footer, .footer, .table-footer, [class*="footer"] {
 .chat.item.asch.self .header.author .ui.dropdown.item.user-menu { color: #f0a020 !important; }
 .header.author [role="menuitem"], .header.author [aria-haspopup], .header.author [tabindex] { color: #4a9eff !important; }
 .chat.item.asch.self .header.author [role="menuitem"], .chat.item.asch.self .header.author [aria-haspopup] { color: #f0a020 !important; }
-
-/* Make nicknames selectable when highlighting text */
-.header.author,
-.header.author .ui.dropdown,
-.header.author .ui.dropdown.item.user-menu,
-.header.author .caption,
-.header.author div.caption,
-.header.author div.caption[role="button"],
-.ui.dropdown:not(.button) > .caption {
-  -webkit-user-select: text !important;
-  -moz-user-select: text !important;
-  user-select: text !important;
-  overflow: visible !important;
-}
 
 /* Caption fix (app sets .caption black !important) */
 body .caption, body div.caption, body div.caption[role="button"],
