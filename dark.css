@@ -269,6 +269,20 @@ footer, .footer, .table-footer, [class*="footer"] {
 .header.author [role="menuitem"], .header.author [aria-haspopup], .header.author [tabindex] { color: #4a9eff !important; }
 .chat.item.asch.self .header.author [role="menuitem"], .chat.item.asch.self .header.author [aria-haspopup] { color: #f0a020 !important; }
 
+/* Make nicknames selectable when highlighting text */
+.header.author,
+.header.author .ui.dropdown,
+.header.author .ui.dropdown.item.user-menu,
+.header.author .caption,
+.header.author div.caption,
+.header.author div.caption[role="button"],
+.ui.dropdown:not(.button) > .caption {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  user-select: text !important;
+  overflow: visible !important;
+}
+
 /* Caption fix (app sets .caption black !important) */
 body .caption, body div.caption, body div.caption[role="button"],
 body .header.author .caption,
