@@ -41,7 +41,7 @@ body, body#dimmable-page, html body, html body#dimmable-page {
 .ui.basic.segment { background-color: transparent !important; }
 
 /* === HEADINGS === */
-h1, h2, h3, h4, h5, h6, .ui.header, .ui.header .content, .ui.sub.header { color: #d0d4e0 !important; }
+h1, h2, h3, h4, h5, h6, .ui.header, .ui.header .content, .ui.sub.header, .ui.header .sub.header, .sub.header { color: #d0d4e0 !important; }
 .ui.dividing.header { border-bottom-color: #2a2e3e !important; }
 
 /* === LINKS (no !important to preserve dupe/share colors) === */
@@ -102,6 +102,10 @@ input::-moz-selection, textarea::-moz-selection { background-color: #264f78 !imp
 /* === MODALS / POPUPS === */
 .ui.modal, .ui.modal > .content, .ui.modal > .header, .ui.modal > .actions {
   background-color: #181a22 !important; color: #d0d4e0 !important; border-color: #2a2e3e !important;
+}
+.ui.modal .content, .ui.modal .description, .ui.modal .sub.header,
+.ui.modal .ui.header .sub.header, .ui.modal p, .ui.modal span, .ui.modal div {
+  color: #d0d4e0 !important;
 }
 .ui.dimmer { background-color: rgba(0, 0, 0, 0.75) !important; }
 .ui.popup { background-color: #1e2130 !important; color: #d0d4e0 !important; border: 1px solid #2a2e3e !important; }
@@ -524,4 +528,54 @@ body .private.chat.session .chat.item.bot .caption,
 body .private.chat.session .chat.item.mndc .caption,
 body .private.chat.session .chat.item.mndc.op.bot .caption {
   color: #8890a4 !important;
+}
+
+/* === Download dialog accordion === */
+.ui.accordion.styled, .ui.accordion.styled.download-targets {
+  background-color: #181a22 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+.ui.accordion.styled .title, .ui.accordion.styled .accordion .title,
+.ui.accordion.styled.download-targets .title {
+  background-color: #1e2130 !important;
+  color: #d0d4e0 !important;
+  border-color: #2a2e3e !important;
+}
+.ui.accordion.styled .title:hover {
+  background-color: #262a3a !important;
+  color: #ffffff !important;
+}
+.ui.accordion.styled .active.title {
+  background-color: #262a3a !important;
+  color: #4a9eff !important;
+}
+.ui.accordion.styled .content, .ui.accordion.styled .accordion .content,
+.ui.accordion.styled.download-targets .content {
+  background-color: #181a22 !important;
+  color: #d0d4e0 !important;
+  border-color: #2a2e3e !important;
+}
+
+/* === Context menu / dropdown popup === */
+.ui.popup.basic,
+.ui.popup.basic.dropdown-content,
+.ui.flowing.popup,
+.ui.flowing.popup.basic,
+.ui.flowing.popup.basic.dropdown-content {
+  background-color: #181a22 !important;
+  color: #d0d4e0 !important;
+  border: 1px solid #2a2e3e !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
+}
+.ui.popup.basic .item,
+.ui.popup.basic a,
+.ui.flowing.popup .item,
+.ui.flowing.popup a {
+  color: #d0d4e0 !important;
+}
+.ui.popup.basic .item:hover,
+.ui.flowing.popup .item:hover {
+  background-color: #262a3a !important;
+  color: #ffffff !important;
 }
