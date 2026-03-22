@@ -46,7 +46,6 @@ RUN INDEX="/airdcpp-webclient/web-resources/index.html" \
     && awk '/<\/head>/{system("echo \"<style>\""); system("cat /tmp/dark.css"); system("echo \"</style>\"")} {print}' "$INDEX" > /tmp/index.html \
     && mv /tmp/index.html "$INDEX" \
     && rm /tmp/dark.css
-RUN sed -i 's|</body>|<script>document.title="AirDC++ Web Client";new MutationObserver(()=>{if(!document.title.startsWith("AirDC++"))document.title="AirDC++ Web Client"}).observe(document.querySelector("title"),{childList:true})</script></body>|' /airdcpp-webclient/web-resources/index.html
 
 COPY .airdcpp/ /.default-config
 COPY entrypoint.sh /entrypoint.sh
