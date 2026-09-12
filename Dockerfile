@@ -51,5 +51,6 @@ RUN node /tmp/inject-css.js \
 
 COPY .airdcpp/ /.default-config
 COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 EXPOSE 5600 5601 21248 21249
 ENTRYPOINT ["/entrypoint.sh"]
