@@ -15,6 +15,10 @@ on:
         description: 'Force rebuild even if tag already exists'
         type: boolean
         default: false
+      suffix:
+        description: 'Optional suffix to append to the version tag (e.g. hotfix1). Leave empty for a normal build.'
+        type: string
+        default: ''
   schedule:
     - cron: '0 6,12,18,0 * * *'
 
@@ -29,10 +33,21 @@ jobs:
           echo "dev_tag=$(curl -fsL https://web-builds.airdcpp.net/develop/ | grep "_64-bit_portable.tar.gz" | grep -v latest | sort -t "_" -k1.14rV | head -n1 | cut -d "_" -f 2)" >> $GITHUB_ENV
           echo "dev_dl_url=https://web-builds.airdcpp.net/develop/$(curl -fsL https://web-builds.airdcpp.net/develop/ | grep "_64-bit_portable.tar.gz" | grep -v latest | sort -t '>' -k 3.9,3.12 -k 3.5,3.7M -k 3.2,3.3n | tail -n1 | sed -nr 's/.*href="([^"]+)".*/\1/p')" >> $GITHUB_ENV
 
+      - name: Apply optional suffix to tags
+        run: |
+          SUFFIX="${{ github.event.inputs.suffix }}"
+          if [ -n "$SUFFIX" ]; then
+            echo "stable_full_tag=${{ env.stable_tag }}-${SUFFIX}" >> $GITHUB_ENV
+            echo "dev_full_tag=${{ env.dev_tag }}-${SUFFIX}" >> $GITHUB_ENV
+          else
+            echo "stable_full_tag=${{ env.stable_tag }}" >> $GITHUB_ENV
+            echo "dev_full_tag=${{ env.dev_tag }}" >> $GITHUB_ENV
+          fi
+
       - name: Does the release exist as docker image
         run: |
-          echo "num_rels_found=$(curl -fsL 'https://hub.docker.com/v2/repositories/rafsis/airdcpp-webclient-darkmode/tags/?page_size=50&ordering=last_updated' | jq -r '.results[].name' | grep -c '^${{env.stable_tag}}$')" >> $GITHUB_ENV
-          echo "num_dev_rels_found=$(curl -fsL 'https://hub.docker.com/v2/repositories/rafsis/airdcpp-webclient-darkmode/tags/?page_size=50&ordering=last_updated' | jq -r '.results[].name' | grep -c '^${{env.dev_tag}}$')" >> $GITHUB_ENV
+          echo "num_rels_found=$(curl -fsL 'https://hub.docker.com/v2/repositories/rafsis/airdcpp-webclient-darkmode/tags/?page_size=50&ordering=last_updated' | jq -r '.results[].name' | grep -c '^${{env.stable_full_tag}}$')" >> $GITHUB_ENV
+          echo "num_dev_rels_found=$(curl -fsL 'https://hub.docker.com/v2/repositories/rafsis/airdcpp-webclient-darkmode/tags/?page_size=50&ordering=last_updated' | jq -r '.results[].name' | grep -c '^${{env.dev_full_tag}}$')" >> $GITHUB_ENV
 
       - name: Determine which is newest
         run: |
@@ -47,6 +62,7 @@ jobs:
         run: |
           target="${{ github.event.inputs.build_target }}"
           force="${{ github.event.inputs.force_build }}"
+          suffix="${{ github.event.inputs.suffix }}"
 
           do_stable=false
           do_develop=false
@@ -69,14 +85,26 @@ jobs:
             fi
           fi
 
+          # A suffix means this is a deliberate manual/hotfix build — always build
+          # the selected channel(s) regardless of whether the base tag exists.
+          if [[ -n "$suffix" ]]; then
+            if [[ "$target" == "stable" || "$target" == "both" ]]; then
+              do_stable=true
+            fi
+            if [[ "$target" == "develop" || "$target" == "both" ]]; then
+              do_develop=true
+            fi
+          fi
+
           echo "do_stable=$do_stable" >> $GITHUB_ENV
           echo "do_develop=$do_develop" >> $GITHUB_ENV
 
       - name: Details
         run: |
-          echo "Stable Version: ${{env.stable_tag}} Existing tags: ${{env.num_rels_found}} DlUrl: ${{env.stable_dl_url}} WillBuild: ${{env.do_stable}}"
-          echo "Develop Version: ${{env.dev_tag}} Existing tags: ${{env.num_dev_rels_found}} DlUrl: ${{env.dev_dl_url}} WillBuild: ${{env.do_develop}}"
+          echo "Stable Version: ${{env.stable_tag}} Full tag: ${{env.stable_full_tag}} Existing tags: ${{env.num_rels_found}} DlUrl: ${{env.stable_dl_url}} WillBuild: ${{env.do_stable}}"
+          echo "Develop Version: ${{env.dev_tag}} Full tag: ${{env.dev_full_tag}} Existing tags: ${{env.num_dev_rels_found}} DlUrl: ${{env.dev_dl_url}} WillBuild: ${{env.do_develop}}"
           echo "Newest: ${{env.newest}}"
+          echo "Suffix: ${{ github.event.inputs.suffix }}"
 
       - if: ${{ env.do_stable == 'true' || env.do_develop == 'true' }}
         name: Checkout
@@ -107,7 +135,7 @@ jobs:
           push: true
           tags: |
             rafsis/airdcpp-webclient-darkmode:stable
-            rafsis/airdcpp-webclient-darkmode:${{ env.stable_tag }}
+            rafsis/airdcpp-webclient-darkmode:${{ env.stable_full_tag }}
             ${{ env.newest == 'stable' && 'rafsis/airdcpp-webclient-darkmode:latest' || '' }}
 
       # -------------------------
@@ -124,5 +152,5 @@ jobs:
           push: true
           tags: |
             rafsis/airdcpp-webclient-darkmode:develop
-            rafsis/airdcpp-webclient-darkmode:${{ env.dev_tag }}
+            rafsis/airdcpp-webclient-darkmode:${{ env.dev_full_tag }}
             ${{ env.newest == 'develop' && 'rafsis/airdcpp-webclient-darkmode:latest' || '' }}
