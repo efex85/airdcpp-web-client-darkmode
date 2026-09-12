@@ -1,7 +1,7 @@
 ARG distro=stable-slim
 FROM debian:${distro}
 
-ARG dl_url
+ARG dl_url="https://web-builds.airdcpp.net/develop/airdcpp_latest_develop_64-bit_portable.tar.gz"
 
 RUN installDeps=' \
         curl \
@@ -35,20 +35,21 @@ RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
 
 # Create default directories
 RUN mkdir -p /.airdcpp /Downloads /Share \
+    # Set permission on default directories
     && chmod a+rwX /.airdcpp /Downloads /Share \
+    # Create symlink to configuration directory
     && ln -sf /.airdcpp /airdcpp-webclient/config \
+    # Fix /favicon.ico 404 request
     && cd /airdcpp-webclient/web-resources \
     && ln -sf images/favicon.*.ico favicon.ico
 
-# Copy dark mode CSS and inject it as inline <style> into index.html
+# Copy dark mode CSS and the injector script, then run it
 COPY dark.css /tmp/dark.css
-RUN INDEX="/airdcpp-webclient/web-resources/index.html" \
-    && awk '/<\/head>/{system("echo \"<style>\""); system("cat /tmp/dark.css"); system("echo \"</style>\"")} {print}' "$INDEX" > /tmp/index.html \
-    && mv /tmp/index.html "$INDEX" \
-    && rm /tmp/dark.css
+COPY inject-css.js /tmp/inject-css.js
+RUN node /tmp/inject-css.js \
+    && rm /tmp/dark.css /tmp/inject-css.js
 
 COPY .airdcpp/ /.default-config
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
 EXPOSE 5600 5601 21248 21249
 ENTRYPOINT ["/entrypoint.sh"]
