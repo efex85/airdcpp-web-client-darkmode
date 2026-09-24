@@ -41,7 +41,7 @@ body, body#dimmable-page, html body, html body#dimmable-page {
 .ui.basic.segment { background-color: transparent !important; }
 
 /* === HEADINGS === */
-h1, h2, h3, h4, h5, h6, .ui.header, .ui.header .content, .ui.sub.header, .ui.header .sub.header, .sub.header { color: #d0d4e0 !important; }
+h1, h2, h3, h4, h5, h6, .ui.header, .ui.header .content, .ui.sub.header { color: #d0d4e0 !important; }
 .ui.dividing.header { border-bottom-color: #2a2e3e !important; }
 
 /* === LINKS (no !important to preserve dupe/share colors) === */
@@ -103,10 +103,6 @@ input::-moz-selection, textarea::-moz-selection { background-color: #264f78 !imp
 .ui.modal, .ui.modal > .content, .ui.modal > .header, .ui.modal > .actions {
   background-color: #181a22 !important; color: #d0d4e0 !important; border-color: #2a2e3e !important;
 }
-.ui.modal .content, .ui.modal .description, .ui.modal .sub.header,
-.ui.modal .ui.header .sub.header, .ui.modal p, .ui.modal span, .ui.modal div {
-  color: #d0d4e0 !important;
-}
 .ui.dimmer { background-color: rgba(0, 0, 0, 0.75) !important; }
 .ui.popup { background-color: #1e2130 !important; color: #d0d4e0 !important; border: 1px solid #2a2e3e !important; }
 .ui.popup::before { background-color: #1e2130 !important; border-color: #2a2e3e !important; }
@@ -144,39 +140,31 @@ i.icon { color: #b0b8cc !important; }
 .ui.list .item, .ui.list .item .header { color: #d0d4e0 !important; }
 .ui.list .item .description { color: #8890a4 !important; }
 .ui.divided.list .item { border-top-color: #2a2e3e !important; }
-.ui.card, .ui.cards > .card { background-color: #181a22 !important; border: 1px solid rgba(42, 46, 62, 0.4) !important; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important; }
-.ui.cards { background-color: transparent !important; }
-.ui.card > .content { border-top-color: rgba(42, 46, 62, 0.4) !important; }
-.ui.card > .content > .header { color: #d0d4e0 !important; }
-.ui.card > .content > .description { color: #8890a4 !important; }
-/* Dashboard widget cards */
-.card.widget, .card.widget.react-grid-item, .react-grid-layout .card.widget {
-  background-color: rgba(24, 26, 34, 0.85) !important;
-  border: 1px solid rgba(42, 46, 62, 0.3) !important;
+.ui.card, .ui.cards > .card,
+.card.widget, .react-grid-layout .widget, .react-grid-item .card.widget {
+  background-color: #181a22 !important;
+  border: 1px solid #2a2e3e !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
 }
-.react-grid-layout { background-color: transparent !important; }
-/* Widget content areas */
-.card.widget .main.content, .card.widget > .content {
-  background-color: transparent !important;
-}
-/* Transfer chart — ApexCharts dark overrides */
-.apexcharts-tooltip,
-.apexcharts-tooltip.apexcharts-theme-light,
-.apexcharts-tooltip.apexcharts-theme-dark {
+.ui.card > .content, .card.widget > .content { border-top-color: #2a2e3e !important; }
+.ui.card > .content > .header { color: #d0d4e0 !important; }
+.ui.card > .content > .description { color: #8890a4 !important; }
+.ui.accordion .title, .ui.accordion .content { color: #d0d4e0 !important; }
+
+/* === ApexCharts tooltips (Transfers widget graph hover box) === */
+.apexcharts-tooltip {
   background-color: #181a22 !important;
   color: #d0d4e0 !important;
   border: 1px solid #2a2e3e !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
 }
-.apexcharts-tooltip .apexcharts-tooltip-title {
+.apexcharts-tooltip-title {
   background-color: #1e2130 !important;
-  color: #d0d4e0 !important;
+  color: #8890a4 !important;
   border-bottom: 1px solid #2a2e3e !important;
 }
-.apexcharts-tooltip .apexcharts-tooltip-text,
-.apexcharts-tooltip .apexcharts-tooltip-text-y-label,
-.apexcharts-tooltip .apexcharts-tooltip-text-y-value {
+.apexcharts-tooltip-text, .apexcharts-tooltip-y-group, .apexcharts-tooltip-text-label,
+.apexcharts-tooltip-text-value, .apexcharts-tooltip-series-group {
   color: #d0d4e0 !important;
 }
 .apexcharts-xaxistooltip, .apexcharts-yaxistooltip {
@@ -184,14 +172,15 @@ i.icon { color: #b0b8cc !important; }
   color: #d0d4e0 !important;
   border: 1px solid #2a2e3e !important;
 }
-.apexcharts-xaxistooltip-bottom:after, .apexcharts-xaxistooltip-bottom:before {
-  border-bottom-color: #2a2e3e !important;
+.apexcharts-xaxistooltip:before, .apexcharts-xaxistooltip:after,
+.apexcharts-yaxistooltip:before, .apexcharts-yaxistooltip:after {
+  border-color: transparent !important;
 }
-/* ApexCharts grid lines */
-.apexcharts-gridline { stroke: #2a2e3e !important; }
-.apexcharts-xaxis-tick { stroke: #2a2e3e !important; }
-.apexcharts-text, .apexcharts-yaxis-label, .apexcharts-xaxis-label { fill: #8890a4 !important; }
-.ui.accordion .title, .ui.accordion .content { color: #d0d4e0 !important; }
+.apexcharts-xaxistooltip:before { border-bottom-color: #2a2e3e !important; }
+.apexcharts-xaxistooltip:after { border-bottom-color: #181a22 !important; }
+.apexcharts-tooltip *, .apexcharts-xaxistooltip *, .apexcharts-yaxistooltip * {
+  color: #d0d4e0 !important;
+}
 .ui.breadcrumb { color: #8890a4 !important; }
 .ui.breadcrumb a { color: #4a9eff !important; }
 .ui.pagination.menu .item { background-color: #1e2130 !important; color: #d0d4e0 !important; }
@@ -530,52 +519,51 @@ body .private.chat.session .chat.item.mndc.op.bot .caption {
   color: #8890a4 !important;
 }
 
-/* === Download dialog accordion === */
-.ui.accordion.styled, .ui.accordion.styled.download-targets {
-  background-color: #181a22 !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-.ui.accordion.styled .title, .ui.accordion.styled .accordion .title,
-.ui.accordion.styled.download-targets .title {
-  background-color: #1e2130 !important;
-  color: #d0d4e0 !important;
-  border-color: #2a2e3e !important;
-}
-.ui.accordion.styled .title:hover {
-  background-color: #262a3a !important;
-  color: #ffffff !important;
-}
-.ui.accordion.styled .active.title {
-  background-color: #262a3a !important;
-  color: #4a9eff !important;
-}
-.ui.accordion.styled .content, .ui.accordion.styled .accordion .content,
-.ui.accordion.styled.download-targets .content {
-  background-color: #181a22 !important;
-  color: #d0d4e0 !important;
-  border-color: #2a2e3e !important;
+/* ============================================================
+   STACKING FIX — breadcrumb/dropdown items above the file list
+   getting covered by the file list itself.
+
+   Cause: `.ui.segment` has `backdrop-filter: blur(10px) !important`,
+   which forces the segment to create a new CSS stacking context.
+   FixedDataTable (the library behind Filelist/Queue/Search/Transfers)
+   also positions its rows with `transform`, which creates its own
+   stacking context. When both live under the same blurred segment,
+   the table's stacking context can end up painting above an open
+   dropdown/breadcrumb menu, no matter how high that menu's z-index is,
+   because z-index only fights it out *within* a shared stacking context.
+
+   Fix: pin the table itself to a low, explicit stacking layer and
+   pin any open dropdown/popup menu to a very high one, both declared
+   as close to the same context as possible so the comparison actually
+   applies, and make sure the menu's own ancestors don't clip it.
+   ============================================================ */
+[class*="fixedDataTable"],
+.public_fixedDataTable_main,
+.fixedDataTableLayout_main,
+.fixedDataTableLayout_rowsContainer,
+.public_fixedDataTable_bodyRow,
+.public_fixedDataTableRow_main {
+  z-index: 0 !important;
 }
 
-/* === Context menu / dropdown popup === */
-.ui.popup.basic,
-.ui.popup.basic.dropdown-content,
-.ui.flowing.popup,
-.ui.flowing.popup.basic,
-.ui.flowing.popup.basic.dropdown-content {
-  background-color: #181a22 !important;
-  color: #d0d4e0 !important;
-  border: 1px solid #2a2e3e !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5) !important;
+.ui.dropdown .menu,
+.ui.dropdown .menu.transition,
+.ui.dropdown .menu.visible,
+.ui.dropdown.active > .menu,
+.ui.active.selection.dropdown .menu,
+.ui.pointing.dropdown > .menu,
+.ui.upward.dropdown > .menu,
+.ui.simple.dropdown .menu,
+.ui.popup {
+  z-index: 99999 !important;
 }
-.ui.popup.basic .item,
-.ui.popup.basic a,
-.ui.flowing.popup .item,
-.ui.flowing.popup a {
-  color: #d0d4e0 !important;
-}
-.ui.popup.basic .item:hover,
-.ui.flowing.popup .item:hover {
-  background-color: #262a3a !important;
-  color: #ffffff !important;
+
+/* The dropdown's own positioned ancestor (breadcrumb/filter toolbar row)
+   must sit in front of the table below it once its menu is actually
+   open. Scoped to `.menu.visible` only (not just `.active`, which some
+   dropdown toggles — like a widget's "..." button — carry even while
+   closed, which previously made this rule apply to every widget panel
+   all the time and drew an unwanted border/seam on the dashboard). */
+.ui.segment:has(.ui.dropdown .menu.visible) {
+  z-index: 1 !important;
 }
