@@ -60,6 +60,7 @@ jobs:
 
       - name: Determine build targets
         run: |
+          event="${{ github.event_name }}"
           target="${{ github.event.inputs.build_target }}"
           force="${{ github.event.inputs.force_build }}"
           suffix="${{ github.event.inputs.suffix }}"
@@ -67,32 +68,31 @@ jobs:
           do_stable=false
           do_develop=false
 
-          # Normal logic: build if the version tag doesn't exist yet on Docker Hub
-          if [[ "${{ env.num_rels_found }}" == "0" ]]; then
-            do_stable=true
-          fi
-          if [[ "${{ env.num_dev_rels_found }}" == "0" ]]; then
-            do_develop=true
-          fi
-
-          # Manual override: force a rebuild of the chosen channel(s)
-          if [[ "$force" == "true" ]]; then
-            if [[ "$target" == "stable" || "$target" == "both" ]]; then
+          if [[ "$event" == "schedule" ]]; then
+            # Scheduled runs: auto-detect only. There's no build_target or
+            # suffix on a schedule trigger, so just build whichever
+            # channel(s) have a version that isn't published as a tag yet.
+            if [[ "${{ env.num_rels_found }}" == "0" ]]; then
               do_stable=true
             fi
-            if [[ "$target" == "develop" || "$target" == "both" ]]; then
+            if [[ "${{ env.num_dev_rels_found }}" == "0" ]]; then
               do_develop=true
             fi
-          fi
-
-          # A suffix means this is a deliberate manual/hotfix build — always build
-          # the selected channel(s) regardless of whether the base tag exists.
-          if [[ -n "$suffix" ]]; then
+          else
+            # Manual dispatch: respect build_target strictly, so picking
+            # "develop" never also triggers a stable build (this is what
+            # broke before — the old unconditional auto-detect block below
+            # would set do_stable=true just because the *stable* tag with
+            # your suffix didn't exist yet, regardless of what you picked).
             if [[ "$target" == "stable" || "$target" == "both" ]]; then
-              do_stable=true
+              if [[ "${{ env.num_rels_found }}" == "0" || "$force" == "true" || -n "$suffix" ]]; then
+                do_stable=true
+              fi
             fi
             if [[ "$target" == "develop" || "$target" == "both" ]]; then
-              do_develop=true
+              if [[ "${{ env.num_dev_rels_found }}" == "0" || "$force" == "true" || -n "$suffix" ]]; then
+                do_develop=true
+              fi
             fi
           fi
 
@@ -101,6 +101,7 @@ jobs:
 
       - name: Details
         run: |
+          echo "Event: ${{ github.event_name }}"
           echo "Stable Version: ${{env.stable_tag}} Full tag: ${{env.stable_full_tag}} Existing tags: ${{env.num_rels_found}} DlUrl: ${{env.stable_dl_url}} WillBuild: ${{env.do_stable}}"
           echo "Develop Version: ${{env.dev_tag}} Full tag: ${{env.dev_full_tag}} Existing tags: ${{env.num_dev_rels_found}} DlUrl: ${{env.dev_dl_url}} WillBuild: ${{env.do_develop}}"
           echo "Newest: ${{env.newest}}"
@@ -141,7 +142,12 @@ jobs:
       # -------------------------
       # Build DEVELOP
       # -------------------------
-      - if: ${{ env.do_develop == 'true' && env.dev_tag != env.stable_tag }}
+      # Skip only when develop and stable currently share the same version
+      # AND this isn't a deliberate suffixed build. A suffix always means
+      # "build this exact channel now", even if its content would currently
+      # match stable's, so a coincidental version match can't silently drop
+      # a manually-requested develop build.
+      - if: ${{ env.do_develop == 'true' && (env.dev_tag != env.stable_tag || github.event.inputs.suffix != '') }}
         name: Build and push develop
         uses: docker/build-push-action@v3
         with:
