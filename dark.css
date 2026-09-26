@@ -24,6 +24,21 @@ body, body#dimmable-page, html body, html body#dimmable-page {
 .ui.vertical.menu .item:hover { background-color: #1e2130 !important; color: #d0d4e0 !important; }
 .ui.vertical.menu .item.active { background-color: #1e2130 !important; color: #4a9eff !important; }
 
+/* Semantic UI's `.text` menu variant is meant to be chrome-less (no
+   background, no border) so it blends into whatever contains it — e.g.
+   the file-row action popup (Download/Find NFO/Search/...) renders its
+   items in a `.ui.text.menu.vertical`, sitting INSIDE an outer `.ui.popup`
+   box that already has its own themed background/border. The generic
+   `.ui.menu`/`.ui.vertical.menu` rules above were overriding this and
+   giving the inner menu its own separate background + border too,
+   producing a visible double box/"frame" effect. Excluding `.text.menu`
+   here restores the single-box look (the chat user-context dropdown,
+   which doesn't use a `.text.menu`, was never affected). */
+.ui.text.menu, .ui.text.menu.vertical, .ui.menu.text {
+  background-color: transparent !important;
+  border: none !important;
+}
+
 /* === SEGMENTS / PANELS === */
 .ui.segment, .ui.segments, .ui.segments .segment,
 .ui.raised.segment, .ui.stacked.segment, .ui.piled.segment {
@@ -104,8 +119,8 @@ input::-moz-selection, textarea::-moz-selection { background-color: #264f78 !imp
   background-color: #181a22 !important; color: #d0d4e0 !important; border-color: #2a2e3e !important;
 }
 .ui.dimmer { background-color: rgba(0, 0, 0, 0.75) !important; }
-.ui.popup { background-color: #1e2130 !important; color: #d0d4e0 !important; border: 1px solid #2a2e3e !important; }
-.ui.popup::before { background-color: #1e2130 !important; border-color: #2a2e3e !important; }
+.ui.popup { background-color: #181a22 !important; color: #d0d4e0 !important; border: 1px solid #2a2e3e !important; }
+.ui.popup::before { background-color: #181a22 !important; border-color: #2a2e3e !important; }
 
 /* === LABELS === */
 .ui.label { background-color: #262a3a !important; color: #d0d4e0 !important; border: 1px solid #2a2e3e !important; }
