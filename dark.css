@@ -525,27 +525,22 @@ body .private.chat.session .chat.item.mndc.op.bot .caption {
 
    Cause: `.ui.segment` has `backdrop-filter: blur(10px) !important`,
    which forces the segment to create a new CSS stacking context.
-   FixedDataTable (the library behind Filelist/Queue/Search/Transfers)
-   also positions its rows with `transform`, which creates its own
-   stacking context. When both live under the same blurred segment,
-   the table's stacking context can end up painting above an open
-   dropdown/breadcrumb menu, no matter how high that menu's z-index is,
-   because z-index only fights it out *within* a shared stacking context.
+   FixedDataTable (the library behind Filelist/Queue/Search/Transfers/
+   hub user lists) also positions its rows with `transform`, which
+   creates its own stacking context. When both live under the same
+   blurred segment, the table's stacking context can end up painting
+   above an open dropdown/breadcrumb menu, no matter how high that
+   menu's z-index is, because z-index only fights it out *within* a
+   shared stacking context.
 
-   Fix: pin the table itself to a low, explicit stacking layer and
-   pin any open dropdown/popup menu to a very high one, both declared
-   as close to the same context as possible so the comparison actually
-   applies, and make sure the menu's own ancestors don't clip it.
+   Fix: pin any open dropdown/popup menu to a very high explicit
+   stacking layer. (An earlier version of this fix also forced every
+   FixedDataTable instance sitewide down to z-index:0, which was too
+   broad — it ended up letting the blurred/GPU-composited table content
+   in the hub user list paint over the session name bar above it. That
+   part is removed; raising the dropdown's own z-index is enough for
+   the original bug on its own.)
    ============================================================ */
-[class*="fixedDataTable"],
-.public_fixedDataTable_main,
-.fixedDataTableLayout_main,
-.fixedDataTableLayout_rowsContainer,
-.public_fixedDataTable_bodyRow,
-.public_fixedDataTableRow_main {
-  z-index: 0 !important;
-}
-
 .ui.dropdown .menu,
 .ui.dropdown .menu.transition,
 .ui.dropdown .menu.visible,
@@ -566,4 +561,39 @@ body .private.chat.session .chat.item.mndc.op.bot .caption {
    all the time and drew an unwanted border/seam on the dashboard). */
 .ui.segment:has(.ui.dropdown .menu.visible) {
   z-index: 1 !important;
+}
+
+/* Root cause of "breadcrumb dropdown gets covered by the file list":
+   airdcpp-webui's own CSS sets `.filelist.session { overflow: hidden }`
+   (Filelists/style.css) around the whole browser+table area, purely to
+   keep the table's own scrolling contained. The breadcrumb bar and the
+   file table are plain sibling elements inside it — no z-index fight,
+   no separate stacking context — so when the breadcrumb's dropdown menu
+   opens and extends downward, that ancestor's `overflow: hidden` clips
+   it flush against the table below, which looks exactly like the table
+   "covering" it. z-index can't fix a clip. Scoped to `.filelist.session`
+   only (not every `.ui.segment`, which previously broke dashboard widget
+   borders and the hub user list) so this can't leak anywhere else. */
+.filelist.session:has(.ui.dropdown.download.active),
+.filelist.session:has(.ui.dropdown.item.download .menu.visible) {
+  overflow: visible !important;
+}
+
+/* That overflow fix alone wasn't enough: the overlap you're seeing isn't
+   actually a clip (a clip would cut the menu off cleanly with nothing
+   drawn there) — it's the table's own opaque rows painting on top of the
+   dropdown, a pure stacking-order problem. `.browserbar` is a `.ui.segment`,
+   and our base rule puts `backdrop-filter` on every segment, which makes
+   it own its own stacking context; its sibling `.virtual-table` (the
+   FixedDataTable wrapper, per airdcpp-webui's VirtualTable.tsx) positions
+   its rows with CSS transforms for virtualization, and backdrop-filter +
+   sibling-transform stacking is a known rendering-engine trouble spot
+   where z-index on the blurred segment doesn't reliably win. Pinning the
+   table itself to a low explicit z-index is what actually fixed this
+   before — just scoped this time to `.filelist.session` only, so it can't
+   reach the hub user list's table (a different, unrelated view) the way
+   the earlier site-wide version did. */
+.filelist.session .virtual-table,
+.filelist.session [class*="fixedDataTable"] {
+  z-index: 0 !important;
 }
