@@ -59,6 +59,16 @@ body, body#dimmable-page, html body, html body#dimmable-page {
 h1, h2, h3, h4, h5, h6, .ui.header, .ui.header .content, .ui.sub.header { color: #d0d4e0 !important; }
 .ui.dividing.header { border-bottom-color: #2a2e3e !important; }
 
+/* Sub-header text (e.g. the download target path under a bundle's name in
+   Queue > Manage files...) uses the plain Fomantic UI class list "sub
+   header" — no "ui" class on that specific div (it's LayoutHeader.tsx's
+   `<div className="sub header">{subHeader}</div>`), so it never matched
+   the `.ui.sub.header` rule above and was left at Fomantic's dark default
+   text color, invisible against our dark background. Covering the
+   unprefixed `.sub.header` here, dimmer than the main heading text since
+   it's meant to read as secondary. */
+.sub.header { color: #8890a4 !important; }
+
 /* === LINKS (no !important to preserve dupe/share colors) === */
 a, a:link { color: #4a9eff; }
 a:hover { color: #6db3ff; }
