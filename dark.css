@@ -622,3 +622,75 @@ body .private.chat.session .chat.item.mndc.op.bot .caption {
 .filelist.session [class*="fixedDataTable"] {
   z-index: 0 !important;
 }
+
+/* ============================================================
+   DOWNLOAD / "Download to..." DIALOG
+   Right-hand content panel (Previous/Shared/Favorites paths) was
+   rendering with Fomantic's light defaults — white panel, dark/grey
+   text — while only the "Dupes" tab's empty-state `.ui.message`
+   looked right, because that's the only piece an existing rule
+   already covered. The dialog's own markup (airdcpp-webui
+   DownloadDialog.tsx / NormalDownloadLayout.tsx / PathList.tsx /
+   AccordionTargets.tsx) is plain Fomantic: `.ui.segment.main-content`
+   wraps a `.ui.relaxed.list` of `.item`s (Previous/Dupes) or a
+   `.ui.styled.accordion` of `.title`/`.content` pairs (Shared/
+   Favorites), and a hardcoded `.disk-info { color: black }` rule in
+   the app's own style.css. None of the existing generic `.ui.list`/
+   `.ui.accordion` rules set a background, so these panels fell back
+   to the browser/Fomantic default instead of inheriting the dark
+   `.ui.segment` background. Scoped tightly to `.download-dialog` and
+   placed last so it wins any ordering ties. */
+.download-dialog .ui.segment.main-content {
+  background-color: #181a22 !important;
+}
+.download-dialog .ui.list,
+.download-dialog .ui.relaxed.list {
+  background-color: transparent !important;
+}
+.download-dialog .ui.list .item {
+  background-color: transparent !important;
+  color: #d0d4e0 !important;
+  border-top-color: #2a2e3e !important;
+}
+.download-dialog .ui.list .item .link-button,
+.download-dialog .ui.list .item a {
+  color: #4a9eff !important;
+}
+.download-dialog .ui.list .item a:hover {
+  color: #6db3ff !important;
+}
+.download-dialog .ui.list .item i.icon {
+  color: #8890a4 !important;
+}
+.download-dialog .disk-info {
+  color: #8890a4 !important;
+}
+.download-dialog .ui.styled.accordion {
+  background-color: transparent !important;
+  border-color: #2a2e3e !important;
+  box-shadow: none !important;
+}
+.download-dialog .ui.accordion .title {
+  background-color: #181a22 !important;
+  color: #d0d4e0 !important;
+  border-color: #2a2e3e !important;
+}
+.download-dialog .ui.accordion .title:hover {
+  background-color: #1e2130 !important;
+}
+.download-dialog .ui.accordion .content {
+  background-color: #13151d !important;
+  color: #d0d4e0 !important;
+}
+.download-dialog .ui.accordion .title i.icon,
+.download-dialog .ui.accordion .title .icon.dropdown {
+  color: #8890a4 !important;
+}
+.download-dialog .ui.message {
+  background-color: #1e2130 !important;
+  color: #d0d4e0 !important;
+  border: 1px solid #2a2e3e !important;
+}
+.download-dialog .ui.message .header {
+  color: #d0d4e0 !important;
+}
