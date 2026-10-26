@@ -251,6 +251,24 @@ code, pre { background-color: #1e2130 !important; border-color: #2a2e3e !importa
 .ui.grid, .ui.grid > .row, .ui.grid > .column, .ui.grid > .row > .column { background-color: transparent !important; }
 .ui.items > .item { border-bottom: 1px solid #1e2130 !important; color: #d0d4e0 !important; }
 .ui.items > .item:hover { background-color: #181a22 !important; }
+
+/* Fomantic UI's "Item" component (used e.g. by Settings > Extensions >
+   Manage installed, each row being `.item.extension`) hardcodes `.meta`
+   and `.extra` text to a semi-transparent black, tuned for light
+   backgrounds — "by <author>", "Non-listed extension", and the
+   Latest/Installed version lines all inherit that and go nearly
+   invisible on our dark background. Nothing else in this file already
+   overrides `.meta`/`.extra`, so add it here. */
+.ui.items > .item .meta,
+.ui.items > .item .extra {
+  color: #8890a4 !important;
+}
+.ui.items > .item .extra .outdated {
+  color: #f0a020 !important;
+}
+.ui.items > .item .extra .latest {
+  color: #48c78e !important;
+}
 .ui.feed, .ui.feed > .event { color: #d0d4e0 !important; background-color: transparent !important; }
 .ui.feed > .event { border-bottom: 1px solid #1e2130 !important; }
 
