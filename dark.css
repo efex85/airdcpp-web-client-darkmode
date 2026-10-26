@@ -1,6 +1,19 @@
 /* AirDC++ Web Client — Dark Mode Theme */
 
 /* === BASE === */
+/* The outer page itself was showing a full-height scrollbar on the far
+   right edge of the browser window — separate from any single panel's
+   own scrollbar (chat, file lists, queue, etc. all scroll internally
+   already). As page/content height varies slightly between views, that
+   outer scrollbar toggles on/off, and each toggle shifts the whole
+   layout left-right by the scrollbar's width — the same jump as the
+   #side-menu issue, just one level up. Since every panel that actually
+   needs to scroll already has its own inner overflow, the page root
+   itself never needs to: killing overflow here removes that scrollbar
+   outright rather than just reserving its space. */
+html, body, body#dimmable-page, html body, html body#dimmable-page {
+  overflow: hidden !important;
+}
 html { background-color: #0f1117 !important; color: #d0d4e0 !important; }
 body, body#dimmable-page, html body, html body#dimmable-page {
   background: #0f1117 !important; background-color: #0f1117 !important; color: #d0d4e0 !important;
@@ -246,6 +259,20 @@ code, pre { background-color: #1e2130 !important; border-color: #2a2e3e !importa
    ============================================================ */
 
 /* Right sidebar icons */
+/* The page kept jumping left-right on navigation because #side-menu uses
+   overflow-y: auto — its scrollbar only shows up when the icon list is
+   just barely taller than the viewport, and that threshold flips as the
+   available height recalculates per page. Each flip adds/removes the
+   scrollbar's width, shifting the whole layout by a few pixels. Below
+   the app's own mobile breakpoint this bar switches to a different
+   layout entirely, so there's no viewport width where this short, fixed
+   set of icons can realistically run out of vertical room — removing
+   the scroll entirely (rather than just reserving its space) is safe
+   and stops the jump outright. */
+#side-menu {
+  overflow-y: hidden !important;
+  scrollbar-gutter: auto !important;
+}
 #side-menu { background-color: #13151d !important; border-left: 1px solid #2a2e3e !important; }
 #side-menu i.icon, .ui.vertical.icon.menu i.icon { color: #c0c8dc !important; }
 #side-menu .item:hover i.icon { color: #ffffff !important; }
