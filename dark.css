@@ -297,6 +297,20 @@ code, pre { background-color: #1e2130 !important; border-color: #2a2e3e !importa
 #side-menu .item.active i.icon { color: #4a9eff !important; }
 #side-menu .item, #side-menu .item span { color: #b0b8cc !important; }
 
+/* Away mode icon (AwayIcon.tsx): the app expresses its state only through
+   Fomantic's colour class — `yellow` when away is on, `grey` when off —
+   with no .active/.disabled class. The blanket `#side-menu i.icon` rule
+   above forces every sidebar icon to one colour with !important, which
+   flattened both states to the same shade. These more specific rules
+   (ID + 4 classes) restore the two states, for the desktop side menu and
+   the mobile menu. Scoped to `.away-state` so no other icon is affected. */
+#side-menu i.icon.away-state.yellow,
+#mobile-menu i.icon.away-state.yellow { color: #f0c020 !important; }
+#side-menu i.icon.away-state.grey,
+#mobile-menu i.icon.away-state.grey { color: #5a6178 !important; }
+#side-menu i.icon.away-state:hover,
+#mobile-menu i.icon.away-state:hover { filter: brightness(1.25); }
+
 /* Session content panel */
 #session-content-panel { background-color: rgba(15, 17, 23, 0.9) !important; color: #d0d4e0 !important; }
 
@@ -738,4 +752,35 @@ body .private.chat.session .chat.item.mndc.op.bot .caption {
 }
 .download-dialog .ui.message .header {
   color: #d0d4e0 !important;
+}
+
+/* ============================================================
+   SETTINGS > SYSTEM > LOGGING
+   The page is a Fomantic `.ui.styled.accordion` of `.log-section`
+   blocks (each a `.title` holding a checkbox form + a `.content`
+   holding file/format fields). Fomantic gives styled accordions a
+   white/light background, and the app's own System/style.css adds
+   `.log-section > .active { background-color: whitesmoke }` for the
+   open section — together that rendered the page grey/white. Scoped to
+   `.system.logging` so no other accordion in the app is touched. */
+.system.logging .ui.styled.accordion {
+  background-color: transparent !important;
+  border: 1px solid #2a2e3e !important;
+  box-shadow: none !important;
+}
+.system.logging .ui.styled.accordion .log-section,
+.system.logging .ui.styled.accordion .title,
+.system.logging .ui.styled.accordion .content {
+  background-color: #181a22 !important;
+  color: #d0d4e0 !important;
+  border-color: #2a2e3e !important;
+}
+.system.logging .log-section > .active,
+.system.logging .ui.styled.accordion .title.active,
+.system.logging .ui.styled.accordion .content.active {
+  background-color: #1e2130 !important;
+}
+.system.logging .ui.styled.accordion .title i.icon,
+.system.logging .ui.styled.accordion .title .icon.dropdown {
+  color: #8890a4 !important;
 }
