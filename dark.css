@@ -475,6 +475,44 @@ form[name="login"] .ui.segment, form[name="login"] .ui.stacked.segment, form.ui.
 .cell-wrapper.name.dupe.share.full a, .cell-wrapper.name.dupe.share.full span { color: #cc66ff !important; }
 .cell-wrapper.download a, .cell-wrapper.download span { color: #48c78e !important; }
 
+/* Hub user list nick colours — kept as close to stock AirDC++ as possible.
+   Stock: a normal user's nick is plain inherited text colour, and an
+   operator's nick is `steelblue` (`.hub.session .cell-wrapper.nick.op` in
+   the app's Hubs/style.css); nothing else in the table is coloured.
+   Two blanket rules in this file broke that — the table-cell text rule
+   above (every cell forced to one colour) and the `.caption` fix (every
+   caption forced blue, meant for chat authors) — so all nicks looked the
+   same. These restore stock: normal users get the theme's text colour,
+   operators get steelblue. Scoped to the hub user list (`.hub.session`),
+   so chat and other tables are untouched. */
+body .hub.session .cell-wrapper.nick,
+body .hub.session .cell-wrapper.nick .caption,
+body .hub.session .cell-wrapper.nick .icon-caption,
+body .hub.session .cell-wrapper.nick span,
+body .hub.session .cell-wrapper.nick div,
+body .hub.session .cell-wrapper.nick a { color: #d0d4e0 !important; }
+body .hub.session .cell-wrapper.nick.op,
+body .hub.session .cell-wrapper.nick.op .caption,
+body .hub.session .cell-wrapper.nick.op .icon-caption,
+body .hub.session .cell-wrapper.nick.op span,
+body .hub.session .cell-wrapper.nick.op div,
+body .hub.session .cell-wrapper.nick.op a { color: steelblue !important; }
+
+/* Hub user list icons: the app colours each user's icon by status via
+   Fomantic colour classes on the <i> — green = online, yellow = away,
+   blue = bot, red = ignored, plus the small corner badge (yellow shield for
+   operators, blue star for yourself, red plug / orange shield for
+   no-connect / passive). The blanket `i.icon { color: #b0b8cc !important }`
+   rule further up flattens every icon in the app to one grey, which is why
+   all users looked identical. These restore Fomantic's stock colours for
+   nick-cell icons only (`.cell-wrapper.nick`), so no other icon changes. */
+body .cell-wrapper.nick i.icon.green  { color: #21ba45 !important; }
+body .cell-wrapper.nick i.icon.yellow { color: #fbbd08 !important; }
+body .cell-wrapper.nick i.icon.blue   { color: #2185d0 !important; }
+body .cell-wrapper.nick i.icon.red    { color: #db2828 !important; }
+body .cell-wrapper.nick i.icon.orange { color: #f2711c !important; }
+body .cell-wrapper.nick i.icon.grey   { color: #767676 !important; }
+
 /* === Events page === */
 .message-section.events,
 .message-section.events[role="article"],
@@ -783,4 +821,19 @@ body .private.chat.session .chat.item.mndc.op.bot .caption {
 .system.logging .ui.styled.accordion .title i.icon,
 .system.logging .ui.styled.accordion .title .icon.dropdown {
   color: #8890a4 !important;
+}
+
+/* ============================================================
+   SEARCH > search options button: active-filter count
+   When any search option is set (file type Directory/File/etc., size,
+   hubs...), the options button shows the number of active options, e.g.
+   "(1)". The app hardcodes that number's colour as an INLINE style,
+   `color: black`, because stock's button is light. On our dark button it
+   is black on near-black and effectively invisible. A stylesheet rule
+   with !important beats a non-important inline style. White (rather than
+   the button's usual grey) keeps the number reading as emphasised, the
+   way the darker-than-icon black does in stock. Scoped to the search
+   options button only. */
+.search-container .search-area .options.trigger .button span {
+  color: #ffffff !important;
 }
